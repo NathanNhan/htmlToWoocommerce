@@ -43,3 +43,16 @@ function load_assets()
     wp_enqueue_script("main.js", get_theme_file_uri() . '/assets/js/main.js', array('jquery'), '1.02', true);
 }
 add_action("wp_enqueue_scripts", "load_assets");
+
+
+
+//Đăng ký menu 
+function add_menu() {
+    add_theme_support( 'menus' );
+    register_nav_menus( array( 
+        'themeLocationOne' => 'Header Menu One',
+    ) );
+}
+
+//Thêm menu vào wordpress -> footer 
+add_action("init","add_menu");
