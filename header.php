@@ -16,7 +16,7 @@
  <?php wp_head();?>
 
 </head>
-<body>
+<body <?php body_class();?>>
      <div class="main-wrapper main-wrapper-3">
         <header class="header-area section-padding-1 transparent-bar">
             <div class="header-large-device">
