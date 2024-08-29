@@ -124,7 +124,26 @@ get_header('shop');
                     <a href="#shop-categorie-3" data-bs-toggle="tab">Kids</a>
                 </div>
                 <div class="row flex-row-reverse">
+                    <div class="shop-top-bar pb-10">
+                        <div class="shop-top-bar-left">
+                            <div class="shop-tab nav">
+                                <a href="#shop-1" class="active" data-bs-toggle="tab"><img class="inject-me" src="assets/images/icon-img/shop-grid.svg" alt=""></a>
+                                <a href="#shop-2" data-bs-toggle="tab"><img class="inject-me" src="assets/images/icon-img/shop-list.svg" alt=""></a>
+                            </div>
+                        </div>
+                        <div class="shop-top-bar-right">
+                            <div class="shop-page-list">
+                                <ul>
+                                         <li>Show</li>
+                                         <li class="active"><a class="page_list" href="javascript:void(0)"data-page="2">2</a></li>
+                                         <li><a class="page_list"href="javascript:void(0)" data-page="4">4</a></li>
+                                         <li><a class="page_list"href="javascript:void(0)"data-page="6">6</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-lg-9">
+
 <?php
 /**
  * Hook: woocommerce_before_main_content.
@@ -178,6 +197,7 @@ if (woocommerce_product_loop()) {
      * @hooked woocommerce_pagination - 10
      */
     do_action('woocommerce_after_shop_loop');
+    custom_pagination();
 } else {
     /**
      * Hook: woocommerce_no_products_found.

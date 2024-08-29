@@ -1293,6 +1293,12 @@
         jQuery('.product-details-tab-large .tab-pane').removeClass('active');
         jQuery('.product-details-tab-large ' + jQueryhref).addClass('active');
     })
+
+
+
+
+    //AJAX shop page list 
+   
     
     
     

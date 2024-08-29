@@ -24928,6 +24928,7 @@ textarea:focus {
   display: inline-block;
   border: 1px solid #E3E4E9;
   position: relative;
+  z-index: 9999!important;
 }
 
 .pro-details-color-content ul li a.active::before {
@@ -28927,6 +28928,8 @@ textarea:focus {
   text-transform: uppercase;
 }
 
+
+
 .shop-page-list ul li:last-child {
   margin-right: 0px;
 }
@@ -28939,6 +28942,20 @@ textarea:focus {
 .shop-page-list ul li a {
   color: #777777;
 }
+
+
+/* Shop page list for dropdown perpage  */
+.shop-page-list form select option {
+  display: inline-block;
+  color: #777777;
+  margin-right: 17px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+
+
+
 
 .pro-pagination-style ul li {
   display: inline-block;
