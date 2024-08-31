@@ -158,7 +158,7 @@ remove_action('woocommerce_before_shop_loop', 'woocommerce_catalog_ordering', 30
 function woocommerce_catalog_page_ordering()
 {
     ?>
-<?php echo '<span class="itemsorder">Items Per Page:' ?>
+<?php echo '<span class="itemsorder">' ?>
     <form action="" method="POST" name="results" class="woocommerce-ordering">
     <select name="woocommerce-sort-by-columns" id="woocommerce-sort-by-columns" class="sortby" onchange="this.form.submit()">
 <?php
@@ -211,21 +211,35 @@ add_action('woocommerce_before_shop_loop', 'woocommerce_catalog_page_ordering', 
 
 
 
+add_filter( 'use_widgets_block_editor', '__return_false' );
 
+
+
+
+
+
+
+
+
+//Init widget sidebar
 function arphabet_widgets_init()
 {
 
     register_sidebar(array(
-        'name' => 'Home right sidebar',
-        'id' => 'home_right_1',
-        'before_widget' => '<div>',
+        'name' => 'Shop Left sidebar',
+        'id' => 'left_sidebar',
+        'before_widget' => '<div class="sidebar-widget">',
         'after_widget' => '</div>',
-        'before_title' => '<h2 class="rounded">',
-        'after_title' => '</h2>',
+        'before_title' => '<h4 class="pro-sidebar-title">',
+        'after_title' => '</h4>',
     ));
 
 }
 add_action('widgets_init', 'arphabet_widgets_init');
+
+
+
+
 
 
 

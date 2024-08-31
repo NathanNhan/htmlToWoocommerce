@@ -563,10 +563,10 @@
     
     
     /*------- Color active -----*/
-    jQuery('.pro-details-color-content').on('click', 'a', function(e){
-        e.preventDefault();
-        jQuery(this).addClass('active').parent().siblings().children('a').removeClass('active');
-    });
+    // jQuery('.pro-details-color-content').on('click', 'a', function(e){
+    //     //e.preventDefault();
+    //     //jQuery(this).addClass('active').parent().siblings().children('a').removeClass('active');
+    // });
     
     
     /*--------------------------------

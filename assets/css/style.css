@@ -24928,7 +24928,7 @@ textarea:focus {
   display: inline-block;
   border: 1px solid #E3E4E9;
   position: relative;
-  z-index: 9999!important;
+ 
 }
 
 .pro-details-color-content ul li a.active::before {
@@ -24947,6 +24947,22 @@ textarea:focus {
 
 .pro-details-color-content ul li a.white {
   background-color: #fff;
+}
+
+.pro-details-color-content ul li a.blue {
+  background-color: blue;
+}
+.pro-details-color-content ul li a.green {
+  background-color: green;
+}
+.pro-details-color-content ul li a.red {
+  background-color: red;
+}
+.pro-details-color-content ul li a.gray {
+  background-color: gray;
+}
+.pro-details-color-content ul li a.yellow {
+  background-color: yellow;
 }
 
 .pro-details-color-content ul li a.azalea {

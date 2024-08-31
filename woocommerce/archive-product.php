@@ -14,7 +14,10 @@
  * @package WooCommerce\Templates
  * @version 8.6.0
  */
+?>
 
+
+<?php 
 defined('ABSPATH') || exit;
 
 get_header('shop');
@@ -219,90 +222,14 @@ do_action('woocommerce_after_main_content');
  *
  * @hooked woocommerce_get_sidebar - 10
  */
-do_action('woocommerce_sidebar');
+
 ?>
+
                     </div>
-                    <div class="col-lg-3">
-                        <div class="shop-sidebar-style">
-                            <div class="sidebar-widget">
-                                <h4 class="pro-sidebar-title">Subcategories</h4>
-                                <div class="sidebar-widget-categori mt-45 mb-70">
-                                    <ul>
-                                        <li><a href="#">All</a> </li>
-                                        <li><a class="active" href="#">Clothing</a> </li>
-                                        <li><a href="#">Shoes</a> </li>
-                                        <li><a href="#">Watches</a> </li>
-                                        <li><a href="#">Jewelry</a> </li>
-                                        <li><a href="#">Accessories</a> </li>
-                                        <li><a href="#"> Big & Tall </a> </li>
-                                        <li><a href="#">Contemporary</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="sidebar-widget">
-                                <h4 class="pro-sidebar-title">Filter By Color</h4>
-                                <div class="pro-details-color-content sidebar-widget-color mt-45 mb-70">
-                                    <ul>
-                                        <li><a class="white" href="#">Black</a></li>
-                                        <li><a class="azalea" href="#">Blue</a></li>
-                                        <li><a class="dolly" href="#">Green</a></li>
-                                        <li><a class="peach-orange" href="#">Orange</a></li>
-                                        <li><a class="mona-lisa active" href="#">Pink</a></li>
-                                        <li><a class="cupid" href="#">gray</a></li>
-                                        <li><a class="one" href="#">one</a></li>
-                                        <li><a class="two" href="#">two</a></li>
-                                        <li><a class="three" href="#">three</a></li>
-                                        <li><a class="four" href="#">four</a></li>
-                                        <li><a class="five" href="#">five</a></li>
-                                        <li><a class="six" href="#">six</a></li>
-                                        <li><a class="seven" href="#">seven</a></li>
-                                        <li><a class="eight" href="#">eight</a></li>
-                                        <li><a class="nine" href="#">nine</a></li>
-                                        <li><a class="ten" href="#">ten</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="sidebar-widget">
-                                <h4 class="pro-sidebar-title">Filter By Size</h4>
-                                <div class="sidebar-widget-size mt-50 mb-75">
-                                    <ul>
-                                        <li><a href="#">XS</a> </li>
-                                        <li><a href="#">S</a> </li>
-                                        <li><a href="#">M</a> </li>
-                                        <li><a href="#">L</a> </li>
-                                        <li><a href="#">XL</a> </li>
-                                        <li><a href="#">XXL</a> </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="sidebar-widget">
-                                <h4 class="pro-sidebar-title">Filter By Price Range</h4>
-                                <div class="price-filter mt-55 mb-65">
-                                    <div id="slider-range"></div>
-                                    <div class="price-slider-amount">
-                                        <div class="label-input">
-                                            <span>Price: </span><input type="text" id="amount" name="price" placeholder="Add Your Price" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="sidebar-widget">
-                                <h4 class="pro-sidebar-title">Filter By Brand</h4>
-                                <div class="sidebar-widget-brand-logo mt-50">
-                                    <ul>
-                                        <li><a href="#"><img src="<?php echo get_theme_file_uri() . '/assets/images/brand-logo/brand-logo-1.png' ?>" alt=""></a></li>
-                                        <li><a href="#"><img src="<?php echo get_theme_file_uri() . '/assets/images/brand-logo/brand-logo-2.png' ?>" alt=""></a></li>
-                                        <li><a href="#"><img src="<?php echo get_theme_file_uri() . '/assets/images/brand-logo/brand-logo-3.png' ?>" alt=""></a></li>
-                                        <li><a href="#"><img src="<?php echo get_theme_file_uri() . '/assets/images/brand-logo/brand-logo-6.png' ?>" alt=""></a></li>
-                                        <li><a href="#"><img src="<?php echo get_theme_file_uri() . '/assets/images/brand-logo/brand-logo-5.png' ?>" alt=""></a></li>
-                                        <li><a href="#"><img src="<?php echo get_theme_file_uri() . '/assets/images/brand-logo/brand-logo-4.png' ?>" alt=""></a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                   <?php get_sidebar(); ?>
                 </div>
             </div>
         </div>
+            
 <?php
 get_footer('shop');
