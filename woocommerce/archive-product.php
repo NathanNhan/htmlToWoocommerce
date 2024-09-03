@@ -134,16 +134,7 @@ get_header('shop');
                                 <a href="#shop-2" data-bs-toggle="tab"><img class="inject-me" src="assets/images/icon-img/shop-list.svg" alt=""></a>
                             </div>
                         </div>
-                        <div class="shop-top-bar-right">
-                            <div class="shop-page-list">
-                                <ul>
-                                         <li>Show</li>
-                                         <li class="active"><a class="page_list" href="javascript:void(0)"data-page="2">2</a></li>
-                                         <li><a class="page_list"href="javascript:void(0)" data-page="4">4</a></li>
-                                         <li><a class="page_list"href="javascript:void(0)"data-page="6">6</a></li>
-                                </ul>
-                            </div>
-                        </div>
+                        
                     </div>
                     <div class="col-lg-9">
 

@@ -64,7 +64,7 @@ add_theme_support('woocommerce');
 add_theme_support('post-thumbnails');
 
 add_filter('loop_shop_columns',function ($columns) {
-        return is_shop() ? 3 : 4;
+        return 3;
     },
     10,
     1
@@ -141,54 +141,63 @@ function custom_pagination()
     }
 }
 
-
-
-
-
-
-
-
-
-
-   
-   
    // Lets create the function to house our form
 remove_action('woocommerce_before_shop_loop', 'woocommerce_catalog_ordering', 30);
 
 function woocommerce_catalog_page_ordering()
 {
     ?>
-<?php echo '<span class="itemsorder">' ?>
-    <form action="" method="POST" name="results" class="woocommerce-ordering">
-    <select name="woocommerce-sort-by-columns" id="woocommerce-sort-by-columns" class="sortby" onchange="this.form.submit()">
+    <div class="row flex-row-reverse">
+   <div class="shop-top-bar pb-10">
+    <div class="shop-top-bar-left">
+        <div class="shop-tab nav">
+            <a href="#shop-1" class="active" data-bs-toggle="tab"><img class="inject-me" src="assets/images/icon-img/shop-grid.svg" alt=""></a>
+            <a href="#shop-2" data-bs-toggle="tab"><img class="inject-me" src="assets/images/icon-img/shop-list.svg" alt=""></a>
+        </div>
+    </div>
+<?php echo '<div class="shop-top-bar-right">' ?>
+    <div class="shop-page-list">
 <?php
-
-//Get products on page reload
-    if (isset($_POST['woocommerce-sort-by-columns']) && (($_COOKIE['shop_pageResults'] != $_POST['woocommerce-sort-by-columns']))) {
-        $numberOfProductsPerPage = $_POST['woocommerce-sort-by-columns'];
-    } else {
-        $numberOfProductsPerPage = $_COOKIE['shop_pageResults'];
-    }
+    //If Cookies === column user chọn => add class active vào thẻ a 
 
 //  This is where you can change the amounts per page that the user will use  feel free to change the numbers and text as you want, in my case we had 4 products per row so I chose to have multiples of four for the user to select.
     $shopCatalog_orderby = apply_filters('woocommerce_sortby_page', array(
         //Add as many of these as you like, -1 shows all products per page
         //  ''       => __('Results per page', 'woocommerce'),
-        '-1' => __('All', 'diking'),
+        '-1' => __('SHOW', 'diking'),
         '2' => __('2', 'diking'),
         '4' => __('4','diking'),
         '6' => __('6', 'diking')
     ));
-
+    ?>
+     <ul>
+    <?php 
     foreach ($shopCatalog_orderby as $sort_id => $sort_name) {
-        echo '<option value="' . $sort_id . '" ' . selected($numberOfProductsPerPage, $sort_id, true) . ' >' . $sort_name . '</option>';
+        ?>
+            <li id="number_per_page" data-number=<?= $sort_id ?>><a href='?woocommerce-sort-by-columns=<?= $sort_id ?>'><?= $sort_name ?></a></li>
+        <?php 
     }
 
     ?>
-</select>
-</form>
-
-<?php echo ' </span>' ?>
+   </ul>
+</div>
+</div>
+</div>
+<script>
+    //Lấy dường dẫn URL
+    const urlParams = new URLSearchParams(window.location.search);
+    //Lấy giá trị tham số woocommerce-sort-by-columns
+    const myParam = urlParams.get('woocommerce-sort-by-columns');
+    //Lấy phần tử li
+    let liTags = document.querySelectorAll("#number_per_page");
+    //Vòng lặp và add class active nếu data number = params 
+    liTags.forEach(element => {
+        if(element.getAttribute('data-number') == myParam) {
+            element.classList.add("active");
+        };
+  });
+</script>
+<?php echo ' </div>' ?>
 <?php
 }
 
@@ -198,9 +207,9 @@ function dl_sort_by_page($count)
     if (isset($_COOKIE['shop_pageResults'])) { // if normal page load with cookie
         $count = $_COOKIE['shop_pageResults'];
     }
-    if (isset($_POST['woocommerce-sort-by-columns'])) { //if form submitted
-        setcookie('shop_pageResults', $_POST['woocommerce-sort-by-columns'], time() + 1209600, '/', 'diking', false); //this will fail if any part of page has been output- hope this works!
-        $count = $_POST['woocommerce-sort-by-columns'];
+    if (isset($_GET['woocommerce-sort-by-columns'])) { //if form submitted
+        setcookie('shop_pageResults', $_GET['woocommerce-sort-by-columns'], time() + 1209600, '/', 'diking', false); //this will fail if any part of page has been output- hope this works!
+        $count = $_GET['woocommerce-sort-by-columns'];
     }
     // else normal page load and no cookie
     return $count;
@@ -212,12 +221,6 @@ add_action('woocommerce_before_shop_loop', 'woocommerce_catalog_page_ordering', 
 
 
 add_filter( 'use_widgets_block_editor', '__return_false' );
-
-
-
-
-
-
 
 
 
@@ -236,6 +239,107 @@ function arphabet_widgets_init()
 
 }
 add_action('widgets_init', 'arphabet_widgets_init');
+
+
+
+//Handle Ajax Filter product by price 
+add_action("wp_ajax_filterPriceSlider", 'filterPrice');
+function filterPrice() {
+//Lấy 2 giá trị min price và max price từ client
+$min = sanitize_text_field( $_REQUEST['min_price'] );
+$max = sanitize_text_field( $_REQUEST['max_price'] );
+//Custom query -> truy vấn ra các sản phẩm trong giữa min và max price
+global $paged;
+$paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
+
+$args = array(
+    'post_type' => 'product',
+    'paged' => $paged,
+    'meta_query' => array(
+        array(
+            'key' => '_price',
+            'value' => array($min, $max),
+            'type' => 'numeric',
+            'compare' => 'BETWEEN',
+        ),
+    ),
+);
+
+$query = new WP_Query($args);
+//Xử lý data trả về từ truy vấn
+// $item = [
+//     [
+//         "ID" => 1, 
+//         "name" => "product name 1",
+//         "price" => "<span class='woocommerce'>15</span>",
+//         "regular_price" => "20",
+//         "sale_price" => "15",
+//         "image" => "<img src='abc.kpb' />", 
+//         "link" => "abc.com", 
+//         "stock_status" => "in stock"
+//     ],
+//     [
+//         "ID" => 2, 
+//         "name" => "product name 1",
+//         "price" => "<span class='woocommerce'>15</span>",
+//         "regular_price" => "20",
+//         "sale_price" => "15",
+//         "image" => "<img src='abc.kpb' />", 
+//         "link" => "abc.com", 
+//         "stock_status" => "in stock"
+//     ],
+//     [
+//         "ID" => 3, 
+//         "name" => "product name 1",
+//         "price" => "<span class='woocommerce'>15</span>",
+//         "regular_price" => "20",
+//         "sale_price" => "15",
+//         "image" => "<img src='abc.kpb' />", 
+//         "link" => "abc.com", 
+//         "stock_status" => "in stock"
+//     ]
+// ]
+ $item = array();
+ while ($query->have_posts()):
+    $query->the_post();
+    $item[] = array( 
+        'ID' => get_the_ID(), 
+        'name' => get_the_title(get_the_ID()), 
+        'price' => wc_get_product( get_the_ID() )->get_price_html(),
+        'regular_price' => wc_get_product( get_the_ID() )->get_regular_price(),
+        'sale_price' => wc_get_product( get_the_ID() )->get_sale_price(),
+        'image' => wc_get_product( get_the_ID() )->get_image(),
+        'link' => get_the_permalink( get_the_ID() ),
+        'stock_status' => wc_get_product( get_the_ID() )->get_stock_status()
+    );
+	
+ endwhile; 
+
+
+
+
+ global $wp_rewrite, $wp_query;
+
+// Again - hard coded, you should make it dynamic though
+$base = trailingslashit('http://diking.test/cua-hang/') . "{$wp_rewrite->pagination_base}/%#%/";
+
+ die(json_encode(
+    array( 
+    'results' => $item, 
+    'pagination' => paginate_links(array(
+        'base' => $base,
+        'format' => '?page=%#%',
+        'current' => max(1, get_query_var('paged')),
+        'total' => $query->max_num_pages,
+        'prev_next' => false,
+        'type' => 'array',
+        'prev_next' => true,
+        'prev_text' => '<i class="icofont-long-arrow-left"></i>',
+        'next_text' => '<i class="icofont-long-arrow-right"></i>',
+    ))
+    )
+     ,  JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE));
+}
 
 
 
