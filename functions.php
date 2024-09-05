@@ -317,28 +317,7 @@ $query = new WP_Query($args);
 
 
 
-
- global $wp_rewrite, $wp_query;
-
-// Again - hard coded, you should make it dynamic though
-$base = trailingslashit('http://diking.test/cua-hang/') . "{$wp_rewrite->pagination_base}/%#%/";
-
- die(json_encode(
-    array( 
-    'results' => $item, 
-    'pagination' => paginate_links(array(
-        'base' => $base,
-        'format' => '?page=%#%',
-        'current' => max(1, get_query_var('paged')),
-        'total' => $query->max_num_pages,
-        'prev_next' => false,
-        'type' => 'array',
-        'prev_next' => true,
-        'prev_text' => '<i class="icofont-long-arrow-left"></i>',
-        'next_text' => '<i class="icofont-long-arrow-right"></i>',
-    ))
-    )
-     ,  JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE));
+ die(json_encode( $item,  JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE));
 }
 
 

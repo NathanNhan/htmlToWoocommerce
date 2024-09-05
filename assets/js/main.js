@@ -1139,7 +1139,7 @@
             slide: function (event, ui) {
                 amountprice.val("$" + ui.values[0] + " -$ " + ui.values[1]);
                 let timing;
-               
+                let htmlPagination = '';
                 //Call Ajax jquery
                 timing = setTimeout(() => {
                     clearTimeout(timing);
@@ -1152,15 +1152,16 @@
                         },
                         success: function (data) {
                             let results = [];
+                            
                             // This outputs the result of the ajax request
                             let objectJSON = JSON.parse(data);
-                            console.log(objectJSON.pagination);
+                            
                             let html = '';
-                            //Ẩn phần phân trang đi
-                            $(".pro-pagination-style > ul").html(objectJSON.pagination);
+                            //ẩn phân trang
+                            $(".pro-pagination-style > ul").hide();
                             //Parse data thành mảng đối tượng trả về từ server 
                             
-                            results = objectJSON.results;
+                            results = objectJSON;
                             
                             //console.log(results);
                             results.forEach((item) => (
