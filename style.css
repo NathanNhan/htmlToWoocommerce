@@ -16,3 +16,124 @@ Tags: one-column, custom-colors, custom-menu, custom-logo, editor-style, feature
 Twenty Twenty-Two WordPress Theme, (C) 2021 WordPress.org
 Twenty Twenty-Two is distributed under the terms of the GNU GPL.
 */
+
+
+
+
+
+ul.product-categories {
+    margin-top: 45px;
+    margin-bottom: 70px;
+}
+
+ul.product-categories>li {
+    margin-bottom: 45px;
+}
+
+
+ul.product-categories>li>a {
+    color: #777777;
+    font-size: 16px;
+    display: block;
+    padding-left: 36px;
+    position: relative;
+}
+
+
+ul.product-categories>li>a.active {
+    font-weight: bold;
+    color: #333333;
+}
+
+ul.product-categories>li>a:before {
+    position: absolute;
+    content: "";
+    left: 0;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    width: 5px;
+    height: 0px;
+    z-index: 9;
+    background-color: #333333;
+    -webkit-transition: all .3s ease 0s;
+    -o-transition: all .3s ease 0s;
+    transition: all .3s ease 0s;
+    opacity: 0;
+    visibility: hidden;
+}
+
+ul.product-categories>li>a.active:before {
+    height: 45px;
+    opacity: 1;
+    visibility: visible;
+}
+
+
+ul.product-categories>li>a:hover {
+    font-weight: bold;
+    color: #333333;
+}
+
+ul.product-categories>li>a:hover:before {
+    height: 45px;
+    opacity: 1;
+    visibility: visible;
+}
+
+
+
+/* Note clear margin right for product coumn */
+ul.products.columns-3>li:nth-child(3n) {
+    margin-right: 0;
+}
+
+
+.woocommerce-product-gallery__wrapper img {
+    z-index: 1;
+    position: relative;
+
+}
+
+.woocommerce-product-gallery__wrapper:before {
+    position: absolute;
+    content: "";
+    width: 432px;
+    height: 432px;
+    top: 10px;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    transform: translateX(-50%);
+    border-radius: 100%;
+    background: -webkit-gradient(linear, left top, left bottom, from(white), color-stop(99%, #ebe8e4));
+    background: -webkit-linear-gradient(top, white 0%, #ebe8e4 99%);
+    background: -o-linear-gradient(top, white 0%, #ebe8e4 99%);
+    background: linear-gradient(180deg, white 0%, #ebe8e4 99%);
+}
+
+/* css for cart page */
+td.product-thumbnail a img {
+    width: 98px !important;
+    height: 112px !important;
+}
+
+
+.product-remove a {
+    display: inline-block !important;
+    width: 30px !important;
+    height: 30px !important;
+    line-height: 28px !important;
+    text-align: center !important;
+    background-color: #F6F6F6 !important;
+}
+
+.product-remove a:active,
+.product-remove a:visited,
+.product-remove a:hover {
+    background-color: black !important;
+}
+
+
+

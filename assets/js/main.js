@@ -1346,6 +1346,26 @@
         ]
     });
 
+
+
+    jQuery('.product-details-tab-small').slick({
+        slidesToShow: 5,
+        slidesToScroll: 1,
+        dots: false,
+        loop: true,
+        fade: false,
+        arrows: false,
+        responsive: [
+            {
+                breakpoint: 767,
+                settings: {
+                    slidesToShow: 3,
+                    slidesToScroll: 1,
+                }
+            }
+        ]
+    });
+
     /*--------------------------
         Tab active
     ---------------------------- */
