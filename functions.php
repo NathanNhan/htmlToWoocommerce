@@ -15,7 +15,7 @@ function load_assets()
     wp_enqueue_style("magnific", get_theme_file_uri() . '/assets/css/plugins/magnific-popup.css', array(), '1.0.3', 'all');
     wp_enqueue_style("jquery-ui", get_theme_file_uri() . '/assets/css/plugins/jquery-ui.css', array(), '1.0.3', 'all');
     wp_enqueue_style("style", get_theme_file_uri() . '/assets/css/style.css', array(), '1.0.3', 'all');
-    wp_enqueue_style("mystyle", get_theme_file_uri() . 'style.css', array(), '1.0.1', 'all');
+    wp_enqueue_style("mystyle", get_theme_file_uri() . '/style.css', array(), '1.0.1', 'all');
     wp_enqueue_script("modernizr-3.11.7.min", get_theme_file_uri() . '/assets/js/vendor/modernizr-3.11.7.min.js', array('jquery'), '1.02', true);
     wp_enqueue_script("jquery-v3.6.0.min", get_theme_file_uri() . '/assets/js/vendor/jquery-v3.6.0.min.js', array(), '1.02', true);
     wp_enqueue_script("jquery-migrate-v3.3.2", get_theme_file_uri() . '/assets/js/vendor/jquery-migrate-v3.3.2.min.js', array(), '1.02', true);
@@ -319,6 +319,61 @@ $query = new WP_Query($args);
 
  die(json_encode( $item,  JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE));
 }
+
+
+
+//Add minites and plus button to quantity for woocommerce
+add_action('woocommerce_before_quantity_input_field', 'bbloomer_display_quantity_minus');
+
+function bbloomer_display_quantity_minus()
+{
+    if (!is_product() && !is_cart()) {
+        return;
+    }
+
+    echo '<button type="button" class="minus" >-</button>';
+}
+
+add_action('woocommerce_after_quantity_input_field', 'bbloomer_display_quantity_plus');
+
+function bbloomer_display_quantity_plus()
+{
+    if (!is_product() && !is_cart()) {
+        return;
+    }
+
+    echo '<button type="button" class="plus" >+</button>';
+}
+
+add_action('wp_footer', 'bbloomer_add_cart_quantity_plus_minus');
+
+function bbloomer_add_cart_quantity_plus_minus()
+{
+    wc_enqueue_js("
+      $('form.cart, td.product-quantity').on( 'click', 'button.plus, button.minus', function() {
+            var qty = $( this ).parents( '.quantity' ).find( '.qty' );
+            var val   = parseFloat(qty.val());
+            var max = parseFloat(qty.attr( 'max' ));
+            var min = parseFloat(qty.attr( 'min' ));
+            var step = parseFloat(qty.attr( 'step' ));
+            if ( $( this ).is( '.plus' ) ) {
+               if ( max && ( max <= val ) ) {
+                  qty.val( max );
+               } else {
+                  qty.val( val + step );
+               }
+            } else {
+               if ( min && ( min >= val ) ) {
+                  qty.val( min );
+               } else if ( val > 1 ) {
+                  qty.val( val - step );
+               }
+            }
+         });
+   ");
+}
+
+
 
 
 

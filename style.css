@@ -137,3 +137,11 @@ td.product-thumbnail a img {
 
 
 
+.woocommerce table.shop_table {
+    background-color: white!important;
+    border: none!important;
+}
+
+.woocommerce table.shop_table td {
+    border-top: none!important;
+}

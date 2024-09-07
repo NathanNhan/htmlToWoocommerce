@@ -73,7 +73,7 @@ do_action( 'woocommerce_before_cart' ); ?>
 				<th class="product-price"><?php esc_html_e( 'Price', 'woocommerce' ); ?></th>
 				<th class="product-quantity"><?php esc_html_e( 'Quantity', 'woocommerce' ); ?></th>
 				<th class="product-subtotal"><?php esc_html_e( 'Subtotal', 'woocommerce' ); ?></th>
-				<th class="product-remove"><span class="screen-reader-text"><?php esc_html_e( 'Remove item', 'woocommerce' ); ?></span></th>
+				<th class="product-remove"><span><?php esc_html_e( 'Remove', 'woocommerce' ); ?></span></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -144,6 +144,7 @@ do_action( 'woocommerce_before_cart' ); ?>
 						</td>
 
 						<td class="product-quantity" data-title="<?php esc_attr_e( 'Quantity', 'woocommerce' ); ?>">
+						
 						<?php
 						if ( $_product->is_sold_individually() ) {
 							$min_quantity = 1;
@@ -156,7 +157,7 @@ do_action( 'woocommerce_before_cart' ); ?>
 						$product_quantity = woocommerce_quantity_input(
 							array(
 								'input_name'   => "cart[{$cart_item_key}][qty]",
-								'input_value'  => $cart_item['quantity'],
+								'input_value'  =>  $cart_item['quantity'],
 								'max_value'    => $max_quantity,
 								'min_value'    => $min_quantity,
 								'product_name' => $product_name,
@@ -167,6 +168,7 @@ do_action( 'woocommerce_before_cart' ); ?>
 
 						echo apply_filters( 'woocommerce_cart_item_quantity', $product_quantity, $cart_item_key, $cart_item ); // PHPCS: XSS ok.
 						?>
+						
 						</td>
 
 						<td class="product-subtotal" data-title="<?php esc_attr_e( 'Subtotal', 'woocommerce' ); ?>">
@@ -200,23 +202,7 @@ do_action( 'woocommerce_before_cart' ); ?>
 
 			<?php do_action( 'woocommerce_cart_contents' ); ?>
 
-			<tr>
-				<td colspan="6" class="actions">
-
-					<?php if ( wc_coupons_enabled() ) { ?>
-						<div class="coupon">
-							<label for="coupon_code" class="screen-reader-text"><?php esc_html_e( 'Coupon:', 'woocommerce' ); ?></label> <input type="text" name="coupon_code" class="input-text" id="coupon_code" value="" placeholder="<?php esc_attr_e( 'Coupon code', 'woocommerce' ); ?>" /> <button type="submit" class="button<?php echo esc_attr( wc_wp_theme_get_element_class_name( 'button' ) ? ' ' . wc_wp_theme_get_element_class_name( 'button' ) : '' ); ?>" name="apply_coupon" value="<?php esc_attr_e( 'Apply coupon', 'woocommerce' ); ?>"><?php esc_html_e( 'Apply coupon', 'woocommerce' ); ?></button>
-							<?php do_action( 'woocommerce_cart_coupon' ); ?>
-						</div>
-					<?php } ?>
-
-					<button type="submit" class="button<?php echo esc_attr( wc_wp_theme_get_element_class_name( 'button' ) ? ' ' . wc_wp_theme_get_element_class_name( 'button' ) : '' ); ?>" name="update_cart" value="<?php esc_attr_e( 'Update cart', 'woocommerce' ); ?>"><?php esc_html_e( 'Update cart', 'woocommerce' ); ?></button>
-
-					<?php do_action( 'woocommerce_cart_actions' ); ?>
-
-					<?php wp_nonce_field( 'woocommerce-cart', 'woocommerce-cart-nonce' ); ?>
-				</td>
-			</tr>
+			
 
 			<?php do_action( 'woocommerce_after_cart_contents' ); ?>
 		</tbody>
@@ -229,6 +215,45 @@ do_action( 'woocommerce_before_cart' ); ?>
 
 
 <?php do_action( 'woocommerce_after_cart' ); ?>
+
+<div class="row">
+                    <div class="col-lg-6 col-md-6">
+                        <div class="discount-code-wrapper discount-tax-wrap">
+                            <h4>Coupon Code </h4>
+                            <div class="discount-code">
+                                <p>Enter your coupon code if you have one!</p>
+                                <form>
+                                    <input type="text" name="coupon_code" class="input-text" id="coupon_code" value="" placeholder="<?php esc_attr_e( 'Coupon code', 'woocommerce' ); ?>" />
+                                   	<button type="submit" class="button<?php echo esc_attr( wc_wp_theme_get_element_class_name( 'button' ) ? ' ' . wc_wp_theme_get_element_class_name( 'button' ) : '' ); ?>" name="apply_coupon" value="<?php esc_attr_e( 'Apply coupon', 'woocommerce' ); ?>"><?php esc_html_e( 'Apply coupon', 'woocommerce' ); ?></button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                        <div class="tax-wrapper discount-tax-wrap">
+                            <h4>Get shipping estimatesss</h4>
+                            <div class="discount-code">
+                                <p>Enter your coupon code if you have one!</p>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <select class="nice-select nice-select-style-3 cart-tax-select">
+                                            <option>Select Country </option>
+                                            <option>Bangladesh</option>
+                                            <option>Bahamas</option>
+                                            <option>Bahrain</option>
+                                            <option>Bangladesh</option>
+                                            <option>Barbados</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <input type="text" required="" placeholder="Zip Code" name="name">
+                                    </div>
+                                </div>
+                                <button type="submit">Apply Coupon </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
 </div>
 </div>
