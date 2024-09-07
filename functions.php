@@ -374,6 +374,33 @@ function bbloomer_add_cart_quantity_plus_minus()
 }
 
 
+//Empty Cart 
+add_action('wp_loaded', 'custom_woocommerce_empty_cart_action', 20);
+function custom_woocommerce_empty_cart_action()
+{
+    if (isset($_GET['empty_cart']) && 'yes' === esc_html($_GET['empty_cart'])) {
+        WC()->cart->empty_cart();
+
+        $referer = wp_get_referer() ? esc_url(remove_query_arg('empty_cart')) : wc_get_cart_url();
+        wp_safe_redirect($referer);
+    }
+}
+
+
+//Add label quantity for single product
+add_action('woocommerce_before_add_to_cart_quantity', 'bbloomer_echo_qty_front_add_cart');
+
+function bbloomer_echo_qty_front_add_cart()
+{
+    global $product;
+    if ($product->get_min_purchase_quantity() == $product->get_max_purchase_quantity()) {
+        return;
+    }
+
+    echo '<div class="qty">Quantity: </div>';
+}
+
+
 
 
 
