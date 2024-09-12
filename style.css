@@ -199,11 +199,9 @@ button.single_add_to_cart_button.button.alt:hover {
 }
 
 .woocommerce div.product div.summary {
-    margin-bottom: 2em;
     background-color: #FFF !important;
     box-shadow: 0 10px 20px rgba(3, 9, 25, 0.04) !important;
-    padding: 68px 60px 103px 60px;
-    margin-top: 67px;
+    padding: 26px 60px 103px 60px;
     margin-left: 20px;
     display: block !important;
     /* height: 100% !important; */
@@ -213,4 +211,39 @@ button.single_add_to_cart_button.button.alt:hover {
     margin-bottom: 0;
     position: relative;
     padding-top: 40px;
+}
+
+.woocommerce input.button:disabled[disabled] {
+    opacity: 0!important;
+}
+
+
+/* Css for product detail */
+.variations_form:not(.wopb-loop-variations-form) table.variations tr {
+    margin-top: 26px;
+    display: flex !important;
+    flex-direction: column;
+}
+
+
+.wopb-block-item,
+.wopb-variation-swatches .wopb-swatch-label.wopb-label-only-text {
+    border: 1px solid lightgray;
+    padding: 5px!important;
+    border-radius: 3px;
+}
+
+span.wopb-variation-swatch-separator {
+    display: none;
+}
+
+button.plus,
+button.minus {
+    background-color: transparent;
+
+}
+
+button.single_add_to_cart_button.button.alt.disabled.wc-variation-selection-needed {
+    background-color: black !important;
+    color: white !important;
 }

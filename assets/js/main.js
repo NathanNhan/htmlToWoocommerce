@@ -2,7 +2,7 @@
 
 (function (jQuery) {
     "use strict";
-
+    
     /*--
     Menu Stick
     -----------------------------------*/
@@ -1380,11 +1380,9 @@
     })
 
 
+    
 
-
-    //AJAX shop page list 
-
-
+ 
 
 
 
