@@ -401,6 +401,30 @@ function bbloomer_echo_qty_front_add_cart()
 }
 
 
+//Handle Position Add To Cart button and price , description
+add_action('init', 'handle_position_detail_product');
+function handle_position_detail_product() {
+    remove_action('woocommerce_single_product_summary','woocommerce_template_single_price',10);
+    remove_action('woocommerce_single_product_summary', 'woocommerce_template_single_excerpt',20 );
+    remove_action('woocommerce_single_product_summary', 'woocommerce_template_single_add_to_cart', 30);
+    remove_action('woocommerce_single_product_summary', 'woocommerce_template_single_meta', 40);
+
+
+} 
+
+add_action('woocommerce_single_product_summary', 'woocommerce_template_single_price', 20);
+add_action('woocommerce_single_product_summary', 'woocommerce_template_single_excerpt', 10);
+add_action('woocommerce_single_product_summary', 'woocommerce_template_single_meta', 30);
+
+add_action('woocommerce_single_product_summary', 'woocommerce_template_single_add_to_cart', 40);
+
+
+
+
+
+
+
+
 
 
 
