@@ -35,7 +35,7 @@ if ( $rating_count > 0 ) : ?>
 		<?php echo wc_get_rating_html( $average, $rating_count ); // WPCS: XSS ok. ?>
 		<?php if ( comments_open() ) : ?>
 			<?php //phpcs:disable ?>
-			<a href="#reviews" class="woocommerce-review-link" rel="nofollow">(<?php printf( _n( '%s customer review', '%s customer reviews', $review_count, 'woocommerce' ), '<span class="count">' . esc_html( $review_count ) . '</span>' ); ?>)</a>
+			<a href="#reviews" class="woocommerce-review-link" rel="nofollow"><?php echo number_format((float)$average,1); ?> &nbsp;&nbsp;&nbsp;| &nbsp;&nbsp;&nbsp;<?php printf( _n( '<span class="colorGray">%s review</span>', '<span class="colorGray">%s reviews</span>', $review_count, 'woocommerce' ), '<span class="count">' . esc_html( $review_count ) . '</span>' ); ?>&nbsp;&nbsp;&nbsp; <span class="colorGray"><?php echo $product->get_total_sales(); ?> orders<span></a>
 			<?php // phpcs:enable ?>
 		<?php endif ?>
 	</div>

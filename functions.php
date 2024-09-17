@@ -421,6 +421,22 @@ add_action('woocommerce_single_product_summary', 'woocommerce_template_single_ad
 
 
 
+add_action('woocommerce_single_product_summary', 'bbloomer_product_sold_count', 10);
+
+function bbloomer_product_sold_count()
+{
+    global $product;
+    $units_sold = $product->get_total_sales();
+    if ($units_sold) {
+        echo '<p>' . sprintf(__('%s orders', 'woocommerce'), $units_sold) . '</p>';
+    }
+
+}
+
+
+
+
+
 
 
 
