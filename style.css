@@ -389,3 +389,24 @@ span.colorGray {
 .woocommerce:where(body:not(.woocommerce-uses-block-theme)) ul.products li.product .price {
     color: #3a3a3a !important;
 }
+
+#add_payment_method #payment ul.payment_methods li input, .woocommerce-cart #payment ul.payment_methods li input, .woocommerce-checkout #payment ul.payment_methods li input {
+	font-size: 14px!important;
+	width : auto !important;
+	height: auto!important;
+	
+}
+
+
+#add_payment_method #payment, .woocommerce-cart #payment, .woocommerce-checkout #payment {
+    background: #FFF;
+    border-radius: 5px;
+    padding: 70px 70px 65px;
+}
+table.shop_table.woocommerce-checkout-review-order-table {
+    padding: 70px 70px 65px;
+}
+
+.woocommerce table.shop_table tbody th, .woocommerce table.shop_table tfoot td, .woocommerce table.shop_table tfoot th {
+    border-top: none;
+}

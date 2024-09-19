@@ -26,41 +26,122 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
 	echo esc_html( apply_filters( 'woocommerce_checkout_must_be_logged_in_message', __( 'You must be logged in to checkout.', 'woocommerce' ) ) );
 	return;
 }
-
+?>
+          <div class="breadcrumb-area breadcrumb-mt breadcrumb-ptb-2">
+            <div class="container">
+                <div class="breadcrumb-content">
+                    <h2>Checkout</h2>
+                    <ul>
+                        <li>
+                            <a href="index.html">Home </a>
+                        </li>
+                        <li><span> > </span></li>
+                        <li>
+                            <a href="index.html">Product </a>
+                        </li>
+                        <li><span> > </span></li>
+                        <li class="active"> Checkout </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="cart-check-order-link-area">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-10 ms-auto me-auto">
+                        <div class="cart-check-order-link">
+                            <a href="cart.html">Shopping Cart</a>
+                            <a class="active" href="checkout.html">Check Out</a>
+                            <a href="order-complete.html">Order Complete</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+		<div class="checkout-area bg-gray pt-160 pb-160">
+			<div class="container">
+<?php 
 ?>
 
 <form name="checkout" method="post" class="checkout woocommerce-checkout" action="<?php echo esc_url( wc_get_checkout_url() ); ?>" enctype="multipart/form-data">
-
+    <div class="row">
+		<div class="col-lg-6">
+			<div class="checkout-left-wrap">
+				<div class="login-guest-top">
+                                <div class="checkout-tab nav">
+                                    <a href="#checkout-login" data-bs-toggle="tab">
+                                        Log In
+                                    </a>
+                                    <a class="active" href="#checkout-guest" data-bs-toggle="tab">
+                                        Buy as a Guest
+                                    </a>
+                                </div>
+                                <div class="tab-content">
+                                    <div id="checkout-login" class="tab-pane">
+                                        <div class="checkout-login-wrap">
+                                            <h4>Login information</h4>
+                                            <div class="checkout-login-style">
+                                                 <?php wc_get_template( 'myaccount/form-login.php' ); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="checkout-guest" class="tab-pane active">
+                                        <div class="checkout-guest-wrap">
+                                            <h4>Contact information</h4>
+                                            <div class="checkout-guest-style">
+                                                <form action="#">
+                                                    <input type="text" name="user-name" placeholder="Enter Mobile Number or Email">
+                                                    <div class="guest-login-toggle-btn">
+                                                        <input type="checkbox">
+                                                        <label>Keep me up to date on news and exclusive offers</label>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 	<?php if ( $checkout->get_checkout_fields() ) : ?>
 
 		<?php do_action( 'woocommerce_checkout_before_customer_details' ); ?>
 
 		<div class="col2-set" id="customer_details">
-			<div class="col-1">
+			<div class="col-12">
 				<?php do_action( 'woocommerce_checkout_billing' ); ?>
 			</div>
 
-			<div class="col-2">
-				<?php do_action( 'woocommerce_checkout_shipping' ); ?>
-			</div>
+			
 		</div>
 
 		<?php do_action( 'woocommerce_checkout_after_customer_details' ); ?>
 
 	<?php endif; ?>
-	
+	    </div>
+		
+		</div>
+	    <div class="col-lg-6">
 	<?php do_action( 'woocommerce_checkout_before_order_review_heading' ); ?>
 	
 	<h3 id="order_review_heading"><?php esc_html_e( 'Your order', 'woocommerce' ); ?></h3>
-	
 	<?php do_action( 'woocommerce_checkout_before_order_review' ); ?>
-
-	<div id="order_review" class="woocommerce-checkout-review-order">
+	
+	<div id="order_review" class="woocommerce-checkout-review-order ">
 		<?php do_action( 'woocommerce_checkout_order_review' ); ?>
-	</div>
+		</div>
+		
+		<?php do_action( 'woocommerce_checkout_after_order_review' ); ?>
+		</div>
+		
+ </div>
 
-	<?php do_action( 'woocommerce_checkout_after_order_review' ); ?>
-
+  <div class="col-12">
+			<div class="back-continue-wrap">
+                    <a href="#">Back to cart</a>
+                    <a href="#">Please Order</a>
+                </div>
+		</div>
 </form>
 
 <?php do_action( 'woocommerce_after_checkout_form', $checkout ); ?>
+</div>
+</div>
