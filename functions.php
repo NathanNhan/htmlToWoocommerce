@@ -457,8 +457,14 @@ function hide_order_recieved_customer_details($template_name)
 }
 
 
+ //Remove checkout login form default
+ remove_action( 'woocommerce_before_checkout_form', 'woocommerce_checkout_login_form', 10 );
 
-// remove_action( 'woocommerce_before_checkout_form', 'woocommerce_checkout_login_form', 10 );
+
+ 
+
+
+
 
 
 

@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 ?>
-</div>
+
 
                 <div class="order-product-details">
                     <form action="#">

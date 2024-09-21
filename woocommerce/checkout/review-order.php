@@ -20,17 +20,19 @@ defined( 'ABSPATH' ) || exit;
 	
 <table class="shop_table woocommerce-checkout-review-order-table">
 	<tbody>
+		
 		<?php
 		do_action( 'woocommerce_review_order_before_cart_contents' );
-
-		
-
 		do_action( 'woocommerce_review_order_after_cart_contents' );
 		?>
 	</tbody>
 	<tfoot>
-
+		<h4 class="checkout-title" id="order_review_heading"><?php esc_html_e( 'Payment Detail', 'woocommerce' ); ?></h4>
+	
+	  
+		
 		<tr class="cart-subtotal">
+			 
 			<th><?php esc_html_e( 'Subtotal', 'woocommerce' ); ?></th>
 			<td><?php wc_cart_totals_subtotal_html(); ?></td>
 		</tr>
