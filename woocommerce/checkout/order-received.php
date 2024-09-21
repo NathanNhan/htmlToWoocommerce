@@ -19,8 +19,41 @@
 
 defined( 'ABSPATH' ) || exit;
 ?>
-
+ <div class="breadcrumb-area breadcrumb-mt breadcrumb-ptb-2">
+            <div class="container">
+                <div class="breadcrumb-content">
+                    <h2>Order Complete</h2>
+                    <ul>
+                        <li>
+                            <a href="index.html">Home </a>
+                        </li>
+                        <li><span> > </span></li>
+                        <li>
+                            <a href="index.html">Product </a>
+                        </li>
+                        <li><span> > </span></li>
+                        <li class="active"> Order Complete </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="cart-check-order-link-area">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-10 ms-auto me-auto">
+                        <div class="cart-check-order-link">
+                            <a href="cart.html">Shopping Cart</a>
+                            <a href="checkout.html">Check Out</a>
+                            <a class="active" href="order-complete.html">Order Complete</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="order-complete-area bg-gray pt-160 pb-160">
+            <div class="container">
 <p class="woocommerce-notice woocommerce-notice--success woocommerce-thankyou-order-received">
+	 <div class="order-complete-title">
 	<?php
 	/**
 	 * Filter the message shown after a checkout is complete.
@@ -39,4 +72,7 @@ defined( 'ABSPATH' ) || exit;
 	// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	echo $message;
 	?>
+	 <div class="order-complete-title">
 </p>
+</div>
+</div>

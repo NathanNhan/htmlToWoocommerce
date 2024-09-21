@@ -437,6 +437,28 @@ function bbloomer_product_sold_count()
 
 
 
+function dis () {
+    wp_dequeue_script('wc-checkout');
+}
+
+add_action('wp_enqueue_scripts', 'dis');
+
+
+
+
+add_filter('wc_get_template', 'hide_order_recieved_customer_details', 10, 1);
+function hide_order_recieved_customer_details($template_name)
+{
+    // Targeting thankyou page and the customer details
+    if (is_wc_endpoint_url('order-received') &&  strpos($template_name, 'order-details.php') !== false) {
+        return false;
+    }
+    return $template_name;
+}
+
+
+
+// remove_action( 'woocommerce_before_checkout_form', 'woocommerce_checkout_login_form', 10 );
 
 
 

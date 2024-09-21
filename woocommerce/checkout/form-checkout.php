@@ -23,8 +23,8 @@ do_action( 'woocommerce_before_checkout_form', $checkout );
 
 // If checkout registration is disabled and not logged in, the user cannot checkout.
 if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_required() && ! is_user_logged_in() ) {
-	echo esc_html( apply_filters( 'woocommerce_checkout_must_be_logged_in_message', __( 'You must be logged in to checkout.', 'woocommerce' ) ) );
-	return;
+    echo esc_html( apply_filters( 'woocommerce_checkout_must_be_logged_in_message', __( 'You must be logged in to checkout.', 'woocommerce' ) ) );
+    return;
 }
 ?>
           <div class="breadcrumb-area breadcrumb-mt breadcrumb-ptb-2">
@@ -81,7 +81,9 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
                                         <div class="checkout-login-wrap">
                                             <h4>Login information</h4>
                                             <div class="checkout-login-style">
-                                                 <?php wc_get_template( 'myaccount/form-login.php' ); ?>
+                                                <form action="#">
+                                                    <?php echo wc_get_template('checkout/form-login.php'); ?>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
