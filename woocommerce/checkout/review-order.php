@@ -23,16 +23,17 @@ defined( 'ABSPATH' ) || exit;
 		
 		<?php
 		do_action( 'woocommerce_review_order_before_cart_contents' );
+	
+		
 		do_action( 'woocommerce_review_order_after_cart_contents' );
 		?>
 	</tbody>
 	<tfoot>
-		<h4 class="checkout-title" id="order_review_heading"><?php esc_html_e( 'Payment Detail', 'woocommerce' ); ?></h4>
-	
-	  
+		
+	    
+	    <th><h4 class="checkout-title" id="order_review_heading"><?php esc_html_e( 'Payment Detail', 'woocommerce' ); ?></h4></th>
 		
 		<tr class="cart-subtotal">
-			 
 			<th><?php esc_html_e( 'Subtotal', 'woocommerce' ); ?></th>
 			<td><?php wc_cart_totals_subtotal_html(); ?></td>
 		</tr>
@@ -75,15 +76,15 @@ defined( 'ABSPATH' ) || exit;
 					<td><?php wc_cart_totals_taxes_total_html(); ?></td>
 				</tr>
 			<?php endif; ?>
+			
 		<?php endif; ?>
 
 		<?php do_action( 'woocommerce_review_order_before_order_total' ); ?>
-
 		<tr class="order-total">
 			<th><?php esc_html_e( 'Total', 'woocommerce' ); ?></th>
 			<td><?php wc_cart_totals_order_total_html(); ?></td>
-		</tr>
-
+			</tr>
+			
 		<?php do_action( 'woocommerce_review_order_after_order_total' ); ?>
 
 	</tfoot>

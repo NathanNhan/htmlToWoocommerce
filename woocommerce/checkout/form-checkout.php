@@ -79,7 +79,7 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
                                 <div class="tab-content">
                                     <div id="checkout-login" class="tab-pane">
                                         <div class="checkout-login-wrap">
-                                            <h4>Login information</h4>
+                                            <h4 class="checkout-title">Login information</h4>
                                             <div class="checkout-login-style">
                                                 <form action="#">
                                                     <?php echo wc_get_template('checkout/form-login.php'); ?>
@@ -139,7 +139,7 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
   <div class="col-12">
 			<div class="back-continue-wrap">
                     <a href="<?php echo site_url("/cua-hang") ?>">Back to cart</a>
-                    <a href="#">Please Order</a>
+                   
                 </div>
 		</div>
 </form>

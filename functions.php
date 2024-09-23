@@ -462,6 +462,43 @@ function hide_order_recieved_customer_details($template_name)
 
 
  
+ //remove checkout billing form
+
+ add_filter( 'woocommerce_checkout_fields' , 'remove_field' );
+ function remove_field($data) {
+	unset($data["billing"]["billing_company"]);
+    unset($data["billing"]["billing_phone"]);
+    unset($data["billing"]["billing_email"]);
+    unset($data["billing"]["billing_city"]);
+    
+    $data['billing']['billing_country']['priority'] = 65;
+
+    //Add class row first / row last into country field and post code field
+    $data['billing']['billing_country']['class'][0] = 'form-row-first';
+    $data['billing']['billing_postcode']['class'][0] = 'form-row-last' ;
+
+    //clear all label
+
+    $data["billing"]["billing_first_name"]['label'] = false;
+    $data["billing"]["billing_last_name"]['label'] = false;
+    $data["billing"]["billing_country"]['label'] = false;
+    $data["billing"]["billing_postcode"]['label'] = false;
+    $data["billing"]["billing_address_1"]['label'] = false;
+    
+    //add place holder
+    $data["billing"]['billing_first_name']['placeholder'] = 'First Name';
+    $data["billing"]['billing_last_name']['placeholder'] = 'Last Name';
+    $data["billing"]['billing_postcode']['placeholder'] = 'Post Code';
+    $data["billing"]['billing_address_2']['placeholder'] = "Address More";
+
+
+
+
+	return $data;
+ }
+
+
+
 
 
 
