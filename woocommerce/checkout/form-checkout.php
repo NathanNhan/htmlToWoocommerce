@@ -92,9 +92,9 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
                                             <h4>Contact information</h4>
                                             <div class="checkout-guest-style">
                                                 <form action="#">
-                                                    <input type="text" name="user-name" placeholder="Enter Mobile Number or Email">
+                                                    <input id="guest_name" type="text" name="user-name" placeholder="Enter Mobile Number or Email">
                                                     <div class="guest-login-toggle-btn">
-                                                        <input type="checkbox">
+                                                        <input type="checkbox" id="check_box">
                                                         <label>Keep me up to date on news and exclusive offers</label>
                                                     </div>
                                                 </form>

@@ -18,7 +18,8 @@ function load_assets()
     wp_enqueue_style("mystyle", get_theme_file_uri() . '/style.css', array(), '1.0.1', 'all');
     wp_enqueue_script("modernizr-3.11.7.min", get_theme_file_uri() . '/assets/js/vendor/modernizr-3.11.7.min.js', array('jquery'), '1.02', true);
     wp_enqueue_script("jquery-v3.6.0.min", get_theme_file_uri() . '/assets/js/vendor/jquery-v3.6.0.min.js', array(), '1.02', true);
-    wp_enqueue_script("jquery-migrate-v3.3.2", get_theme_file_uri() . '/assets/js/vendor/jquery-migrate-v3.3.2.min.js', array(), '1.02', true);
+wp_enqueue_script("jquery-migrate-v3.3.2", get_theme_file_uri() . '/assets/js/vendor/jquery-migrate-v3.3.2.min.js', array(), '1.02', true);
+
     wp_enqueue_script("popper", get_theme_file_uri() . '/assets/js/vendor/popper.js', array('jquery'), '1.02', true);
     wp_enqueue_script("bootstrap.min.js", get_theme_file_uri() . '/assets/js/vendor/bootstrap.min.js', array('jquery'), '1.02', true);
     wp_enqueue_script("svg-injector.min.js", get_theme_file_uri() . '/assets/js/plugins/svg-injector.min.js', array('jquery'), '1.02', true);
@@ -41,8 +42,11 @@ function load_assets()
 
     wp_enqueue_script("main.js", get_theme_file_uri() . '/assets/js/main.js', array('jquery'), '1.02', true);
     wp_localize_script("main.js", "ajaxurl", array(
-    "baseURL" => admin_url("admin-ajax.php"),
+    "baseURL" => admin_url("admin-ajax.php")
 ));
+
+    wp_enqueue_script("myjs.js", get_theme_file_uri() . '/assets/js/my_javascript.js', array('jquery'), '1.02', true);
+
 
 }
 add_action("wp_enqueue_scripts", "load_assets");
@@ -244,81 +248,71 @@ add_action('widgets_init', 'arphabet_widgets_init');
 
 //Handle Ajax Filter product by price 
 add_action("wp_ajax_filterPriceSlider", 'filterPrice');
-function filterPrice() {
+add_action('wp_ajax_nopriv_filterPriceSlider', 'filterPrice');
+
+function filterPrice()
+{
 //Lấy 2 giá trị min price và max price từ client
-$min = sanitize_text_field( $_REQUEST['min_price'] );
-$max = sanitize_text_field( $_REQUEST['max_price'] );
+    $min = sanitize_text_field($_POST['min_price']);
+    $max = sanitize_text_field($_POST['max_price']);
 //Custom query -> truy vấn ra các sản phẩm trong giữa min và max price
-global $paged;
-$paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 
-$args = array(
-    'post_type' => 'product',
-    'paged' => $paged,
-    'meta_query' => array(
-        array(
-            'key' => '_price',
-            'value' => array($min, $max),
-            'type' => 'numeric',
-            'compare' => 'BETWEEN',
+    $args = array(
+        'post_type' => 'product',
+        'paged' => 1,
+        'meta_query' => array(
+            array(
+                'key' => '_price',
+                'value' => array($min, $max),
+                'type' => 'numeric',
+                'compare' => 'BETWEEN',
+            ),
         ),
-    ),
-);
-
-$query = new WP_Query($args);
-//Xử lý data trả về từ truy vấn
-// $item = [
-//     [
-//         "ID" => 1, 
-//         "name" => "product name 1",
-//         "price" => "<span class='woocommerce'>15</span>",
-//         "regular_price" => "20",
-//         "sale_price" => "15",
-//         "image" => "<img src='abc.kpb' />", 
-//         "link" => "abc.com", 
-//         "stock_status" => "in stock"
-//     ],
-//     [
-//         "ID" => 2, 
-//         "name" => "product name 1",
-//         "price" => "<span class='woocommerce'>15</span>",
-//         "regular_price" => "20",
-//         "sale_price" => "15",
-//         "image" => "<img src='abc.kpb' />", 
-//         "link" => "abc.com", 
-//         "stock_status" => "in stock"
-//     ],
-//     [
-//         "ID" => 3, 
-//         "name" => "product name 1",
-//         "price" => "<span class='woocommerce'>15</span>",
-//         "regular_price" => "20",
-//         "sale_price" => "15",
-//         "image" => "<img src='abc.kpb' />", 
-//         "link" => "abc.com", 
-//         "stock_status" => "in stock"
-//     ]
-// ]
- $item = array();
- while ($query->have_posts()):
-    $query->the_post();
-    $item[] = array( 
-        'ID' => get_the_ID(), 
-        'name' => get_the_title(get_the_ID()), 
-        'price' => wc_get_product( get_the_ID() )->get_price_html(),
-        'regular_price' => wc_get_product( get_the_ID() )->get_regular_price(),
-        'sale_price' => wc_get_product( get_the_ID() )->get_sale_price(),
-        'image' => wc_get_product( get_the_ID() )->get_image(),
-        'link' => get_the_permalink( get_the_ID() ),
-        'stock_status' => wc_get_product( get_the_ID() )->get_stock_status()
     );
-	
- endwhile; 
 
+    $query = new WP_Query($args);
 
+    $item = array();
+    while ($query->have_posts()):
+        $query->the_post();
+        $item[] = array(
+            
+            'ID' => get_the_ID(),
+            'name' => get_the_title(get_the_ID()),
+            'price' => wc_get_product(get_the_ID())->get_price_html(),
+            'regular_price' => wc_get_product(get_the_ID())->get_regular_price(),
+            'sale_price' => wc_get_product(get_the_ID())->get_sale_price(),
+            'image' => wc_get_product(get_the_ID())->get_image(),
+            'link' => get_the_permalink(get_the_ID()),
+            'stock_status' => wc_get_product(get_the_ID())->get_stock_status(),
+        );
 
- die(json_encode( $item,  JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE));
+    endwhile;
+
+    // total: tổng số records
+    // limit: số records hiển thị trên mỗi trang
+
+    $total = $query->found_posts;
+    $limit = get_option( 'posts_per_page' );
+    $paginate = ceil($total / $limit);
+    $results = array(
+        'paginate' => $paginate, 
+        'data' => $item
+    );
+   
+    
+    print_r(json_encode($results));
+    wp_die();
 }
+
+//Handle AJAX cho phân trang
+add_action("wp_ajax_paginateAjax", 'pagination');
+add_action('wp_ajax_nopriv_paginateAjax', 'pagination');
+function pagination () {
+    //Học viên tự làm dựa theo phần handle ajax lọc theo giá ở trên
+}
+
+
 
 
 
@@ -496,6 +490,67 @@ function hide_order_recieved_customer_details($template_name)
 
 	return $data;
  }
+
+
+
+ function guest_init() {
+    $labels = array(
+        'name'                  => _x( 'Guest', 'guest', 'diking' ),
+        'singular_name'         => _x( 'Guest', 'guest', 'diking' ),
+        'menu_name'             => _x( 'Guest', 'Guest', 'diking' ),
+    );
+ 
+    $args = array(
+        'labels'             => $labels,
+        'public'             => true,
+        'publicly_queryable' => true,
+        'show_ui'            => true,
+        'show_in_menu'       => true,
+        'show_in_rest'       => true,
+        'query_var'          => true,
+        'rewrite'            => array( 'slug' => 'guest' ),
+        'capability_type'    => 'post',
+        'has_archive'        => true,
+        'hierarchical'       => false,
+        'menu_position'      => null,
+        'supports'           => array( 'title', 'editor'),
+    );
+ 
+    register_post_type( 'guest', $args );
+}
+ 
+add_action( 'init', 'guest_init' );
+
+
+
+
+// function create_new_guest()
+// {
+//     global $wpdb;
+
+//     $new_post = array(
+//     'ID' => '',
+//     'post_type' => 'guest',
+//     'post_status' => 'publish',
+//     'post_title' => $_POST['title'],
+//     'post_content' => $_POST['content'],
+// );
+// //here i introduce the data in the custom type post
+// $post_id = wp_insert_post($new_post);
+// print_r(json_encode(array("status" => "200", "message" => "We created new guest successfully!")));
+
+// wp_die();
+
+// }
+
+// add_action('wp_ajax_nopriv_createGuest', 'create_new_guest');
+// add_action('wp_ajax_createGuest', 'create_new_guest');
+
+
+
+
+
+
 
 
 

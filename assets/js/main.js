@@ -2,7 +2,7 @@
 
 (function (jQuery) {
     "use strict";
-    
+
     /*--
     Menu Stick
     -----------------------------------*/
@@ -1143,61 +1143,129 @@
                 //Call Ajax jquery
                 timing = setTimeout(() => {
                     clearTimeout(timing);
-                    $.ajax({
-                        url: ajaxurl.baseURL,
-                        data: {
-                            'action': 'filterPriceSlider',
-                            'min_price': ui.values[0],
-                            'max_price': ui.values[1]
-                        },
-                        success: function (data) {
-                            let results = [];
-                            
-                            // This outputs the result of the ajax request
-                            let objectJSON = JSON.parse(data);
-                            
-                            let html = '';
-                            //ẩn phân trang
-                            $(".pro-pagination-style > ul").hide();
-                            //Parse data thành mảng đối tượng trả về từ server 
-                            
-                            results = objectJSON;
-                            
-                            //console.log(results);
-                            results.forEach((item) => (
-                                html += `
-                                <li class="product-wrap product type-product post-${item.ID} status-publish instock product_cat-music has-post-thumbnail downloadable virtual purchasable product-type-simple">
-                                    <a href="${item.link}" class="woocommerce-LoopProduct-link woocommerce-loop-product__link">${item.image}<h2 class="woocommerce-loop-product__title">${item.name}</h2>
-                                    <span class="price">${item.price}</span>
-                                    </a>
-                                    <div class="product-action-position-1 text-center">
-                                        <div class="product-content">
-                                            <h4><a href="${item.link}">${item.name}</a></h4>
-                                            <div class="product-price">
-                                                <span>${item.regular_price}</span>
-                                                <span class="old-price">${item.sale_price}</span>
-                                            </div>
-                                    </div>
-                                    <div class="product-action-wrap">
-                                        <div class="product-action-cart">
-                                            <a href="?add-to-cart=${item.ID}" aria-describedby="woocommerce_loop_add_to_cart_link_describedby_${item.ID}" data-quantity="1" class="button product_type_simple add_to_cart_button ajax_add_to_cart" data-product_id="${item.ID}" data-product_sku="woo-album" aria-label="Thêm vào giỏ hàng: “${item.name}”" rel="nofollow" data-product_name="${item.name}" data-price="${item.sale_price ? item.sale_price : item.regular_price}">Thêm vào giỏ hàng</a>
+                    var object_data = {
+                        action: "filterPriceSlider",
+                        min_price: ui.values[0],
+                        max_price: ui.values[1]
+                    }
+
+                    jQuery.post(ajaxurl.baseURL, object_data, function (res) {
+                        var result = jQuery.parseJSON(res);
+                        console.log(result);
+                        let html = '';
+                        let htmlPaginate = '';
+                      
+                        result.data.forEach((item) => (
+                            html += `
+                                    <li class="product-wrap product type-product post-${item.ID} status-publish instock product_cat-music has-post-thumbnail downloadable virtual purchasable product-type-simple">
+                                        <a href="${item.link}" class="woocommerce-LoopProduct-link woocommerce-loop-product__link">${item.image}<h2 class="woocommerce-loop-product__title">${item.name}</h2>
+                                        <span class="price">${item.price}</span>
+                                        </a>
+                                        <div class="product-action-position-1 text-center">
+                                            <div class="product-content">
+                                                <h4><a href="${item.link}">${item.name}</a></h4>
+                                                <div class="product-price">
+                                                    <span>${item.regular_price}</span>
+                                                    <span class="old-price">${item.sale_price}</span>
+                                                </div>
                                         </div>
-                                        <button data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="icon-zoom"></i></button>
-                                        <button title="Add to Compare"><i class="icon-compare"></i></button>
-                                        <button title="Add to Wishlist"><i class="icon-heart-empty"></i></button>
-                                    </div>
-                                    </div><span id="woocommerce_loop_add_to_cart_link_describedby_${item.ID}" class="screen-reader-text">
-                                    </span>
-                                </li>
-                                `
-                            ));
-                            $(".columns-3").html(html);
-                            
-                        },
-                        error: function (errorThrown) {
-                            console.log(errorThrown);
+                                        <div class="product-action-wrap">
+                                            <div class="product-action-cart">
+                                                <a href="?add-to-cart=${item.ID}" aria-describedby="woocommerce_loop_add_to_cart_link_describedby_${item.ID}" data-quantity="1" class="button product_type_simple add_to_cart_button ajax_add_to_cart" data-product_id="${item.ID}" data-product_sku="woo-album" aria-label="Thêm vào giỏ hàng: “${item.name}”" rel="nofollow" data-product_name="${item.name}" data-price="${item.sale_price ? item.sale_price : item.regular_price}">Thêm vào giỏ hàng</a>
+                                            </div>
+                                            <button data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="icon-zoom"></i></button>
+                                            <button title="Add to Compare"><i class="icon-compare"></i></button>
+                                            <button title="Add to Wishlist"><i class="icon-heart-empty"></i></button>
+                                        </div>
+                                        </div><span id="woocommerce_loop_add_to_cart_link_describedby_${item.ID}" class="screen-reader-text">
+                                        </span>
+                                    </li>
+                                    `
+                        ));
+                        jQuery(".columns-3").html(html);
+                        //Thêm phân trang mới vào
+                        
+                        for(var i = 1; i <= result.paginate; i++) {
+                            htmlPaginate += `
+                            <li><a class="page-numbers" data-num=${i} href="javascript:void(0)">${i}</a>
+                            </li>
+                            `
                         }
+                        htmlPaginate += `<li>
+                            <a class="next page-numbers" data-num=${i+1 >= result.paginate ? result.paginate : i+1} href="javascript:void(0)"><i class="icofont-long-arrow-right"></i></a>
+                            </li>`
+                        jQuery('.pro-pagination-style > ul').html(htmlPaginate);
+
+
+                        document.querySelectorAll(".page-numbers")[0].classList.add('active');
+                        //Handle Ajax pagination
+                        var link_paginates = document.querySelectorAll(".page-numbers");
+                        link_paginates.forEach((item) => {
+                            item.addEventListener("click", (e) => {
+                                e.preventDefault();
+                                // console.log(e.target.getAttribute('data-num'));
+                                // console.log("min price",ui.values[0]);
+                                // console.log("max price",ui.values[1]);
+                                //Học viên tự xử lý send AJAX phân trang về phía backend server
+                            })
+                        })
                     });
+                    // $.ajax({
+                    //     url: ajaxurl.baseURL,
+                    //     type: 'POST',
+                    //     data: {
+                    //         'action': 'filterPriceSlider',
+                    //         'min_price': ui.values[0],
+                    //         'max_price': ui.values[1]
+                    //     },
+                    //     success: function (data) {
+                    //         let results = [];
+
+                    //         // This outputs the result of the ajax request
+                    //         let objectJSON = JSON.parse(data);
+
+                    //         let html = '';
+                    //         //ẩn phân trang
+                    //         $(".pro-pagination-style > ul").hide();
+                    //         //Parse data thành mảng đối tượng trả về từ server 
+
+                    //         results = objectJSON;
+
+                    //         //console.log(results);
+                    //         results.forEach((item) => (
+                    //             html += `
+                    //             <li class="product-wrap product type-product post-${item.ID} status-publish instock product_cat-music has-post-thumbnail downloadable virtual purchasable product-type-simple">
+                    //                 <a href="${item.link}" class="woocommerce-LoopProduct-link woocommerce-loop-product__link">${item.image}<h2 class="woocommerce-loop-product__title">${item.name}</h2>
+                    //                 <span class="price">${item.price}</span>
+                    //                 </a>
+                    //                 <div class="product-action-position-1 text-center">
+                    //                     <div class="product-content">
+                    //                         <h4><a href="${item.link}">${item.name}</a></h4>
+                    //                         <div class="product-price">
+                    //                             <span>${item.regular_price}</span>
+                    //                             <span class="old-price">${item.sale_price}</span>
+                    //                         </div>
+                    //                 </div>
+                    //                 <div class="product-action-wrap">
+                    //                     <div class="product-action-cart">
+                    //                         <a href="?add-to-cart=${item.ID}" aria-describedby="woocommerce_loop_add_to_cart_link_describedby_${item.ID}" data-quantity="1" class="button product_type_simple add_to_cart_button ajax_add_to_cart" data-product_id="${item.ID}" data-product_sku="woo-album" aria-label="Thêm vào giỏ hàng: “${item.name}”" rel="nofollow" data-product_name="${item.name}" data-price="${item.sale_price ? item.sale_price : item.regular_price}">Thêm vào giỏ hàng</a>
+                    //                     </div>
+                    //                     <button data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="icon-zoom"></i></button>
+                    //                     <button title="Add to Compare"><i class="icon-compare"></i></button>
+                    //                     <button title="Add to Wishlist"><i class="icon-heart-empty"></i></button>
+                    //                 </div>
+                    //                 </div><span id="woocommerce_loop_add_to_cart_link_describedby_${item.ID}" class="screen-reader-text">
+                    //                 </span>
+                    //             </li>
+                    //             `
+                    //         ));
+                    //         $(".columns-3").html(html);
+
+                    //     },
+                    //     error: function (errorThrown) {
+                    //         console.log(errorThrown);
+                    //     }
+                    // });
 
                 }, 500)
 
@@ -1382,7 +1450,7 @@
 
 
 
- 
+
 
 
 
