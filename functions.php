@@ -276,7 +276,6 @@ function filterPrice()
     while ($query->have_posts()):
         $query->the_post();
         $item[] = array(
-            
             'ID' => get_the_ID(),
             'name' => get_the_title(get_the_ID()),
             'price' => wc_get_product(get_the_ID())->get_price_html(),
