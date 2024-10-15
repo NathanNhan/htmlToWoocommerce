@@ -35,10 +35,10 @@ $customer_orders = get_posts(
 if ( $customer_orders ) : ?>
 
 	<h2><?php echo apply_filters( 'woocommerce_my_account_my_orders_title', esc_html__( 'Recent orders', 'woocommerce' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></h2>
+    <div class="myaccount-table table-responsive text-center">
+	<table class="table table-bordered">
 
-	<table class="shop_table shop_table_responsive my_account_orders">
-
-		<thead>
+		<thead class="thead-light">
 			<tr>
 				<?php foreach ( $my_orders_columns as $column_id => $column_name ) : ?>
 					<th class="<?php echo esc_attr( $column_id ); ?>"><span class="nobr"><?php echo esc_html( $column_name ); ?></span></th>
@@ -92,4 +92,5 @@ if ( $customer_orders ) : ?>
 			<?php endforeach; ?>
 		</tbody>
 	</table>
+	</div>
 <?php endif; ?>

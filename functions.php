@@ -523,27 +523,30 @@ add_action( 'init', 'guest_init' );
 
 
 
-// function create_new_guest()
-// {
-//     global $wpdb;
+function create_new_guest()
+{
+ 
 
-//     $new_post = array(
-//     'ID' => '',
-//     'post_type' => 'guest',
-//     'post_status' => 'publish',
-//     'post_title' => $_POST['title'],
-//     'post_content' => $_POST['content'],
-// );
-// //here i introduce the data in the custom type post
-// $post_id = wp_insert_post($new_post);
-// print_r(json_encode(array("status" => "200", "message" => "We created new guest successfully!")));
+    $new_post = array(
+    'ID' => '',
+    'post_type' => 'guest',
+    'post_status' => $_POST['status'],
+    'post_title' => $_POST['title'],
+    'post_content' => $_POST['content'],
+);
+//here i introduce the data in the custom type post
+$post_id = wp_insert_post($new_post);
+if(!empty($post_id)) {
+    print_r(json_encode(array("status" => "200", "message" => "We created new guest successfully!")));
 
-// wp_die();
+}
 
-// }
+wp_die();
 
-// add_action('wp_ajax_nopriv_createGuest', 'create_new_guest');
-// add_action('wp_ajax_createGuest', 'create_new_guest');
+}
+
+add_action('wp_ajax_nopriv_createGuest', 'create_new_guest');
+add_action('wp_ajax_createGuest', 'create_new_guest');
 
 
 

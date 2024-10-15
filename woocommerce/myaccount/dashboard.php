@@ -27,7 +27,7 @@ $allowed_html = array(
 	),
 );
 ?>
-
+<h3>Dashboard</h3>
 <p>
 	<?php
 	printf(

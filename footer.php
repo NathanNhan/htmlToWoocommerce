@@ -1,3 +1,4 @@
+        </div>
         <footer class="footer-area pt-130">
             <div class="footer-top pb-120">
                 <div class="container">

@@ -518,3 +518,13 @@ button#place_order:hover {
 button#place_order {
     transform: translate(77px, 199px);
 }
+
+
+/* Css for my account page */
+.u-column2.col-2.woocommerce-Address {
+    display: none!important;
+}
+
+.login-register-wrapper .login-form-container .login-register-form form input {
+    background-color: transparent!important;
+}

@@ -18,7 +18,9 @@
 defined('ABSPATH') || exit;
 
 if (is_user_logged_in()) {
-    return;
+    ?>
+      <h3>Hello you are logged in with  <?php echo get_current_user(); ?></h3>
+    <?php 
 }
 
 ?>
