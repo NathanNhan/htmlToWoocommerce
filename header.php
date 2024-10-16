@@ -56,16 +56,6 @@
                                 </div>
                                 <div class="same-style header-cart">
                                     <a class="cart-active" href="<?php echo wc_get_cart_url(); ?>"><i class="icofont-shopping-cart"></i></a>
-                                     <?php foreach (WC()->cart->get_cart() as $cart_item_key => $cart_item) {
-                                                $product = $cart_item['data'];
-                                                $quantity = $cart_item['quantity'];
-                                                $price = WC()->cart->get_product_price($product);
-
-                                            }
-                                            //  print_r($product->name);
-                                            // print_r(WC()->cart->get_total())
-
-                                     ?>
                                 </div>
                             </div>
                         </div>
@@ -107,37 +97,28 @@
                 <div class="cart-content">
                     <h3>Shopping Cart</h3>
                     <ul>
+                        <?php foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) :?>
+                        <?php $product = $cart_item['data']; ?>
                         <li class="single-product-cart">
                             <div class="cart-img">
-                                <a href="#"><img src="<?php echo get_theme_file_uri() . '/assets/images/cart/cart-1.jpg'?>" alt=""></a>
+                                <a href="<?= $product->get_permalink( $cart_item ); ?>"><?=$product->get_image(); ?></a>
                             </div>
                             <div class="cart-title">
-                                <h4><a href="#">Awesome Mobile</a></h4>
-                                <span> 1 × $49.00	</span>
+                                <h4><a href="#"><?= $product->name ?></a></h4>
+                                <span> <?= $cart_item['quantity'] ?> × $<?= WC()->cart->get_product_price($product) ?>	</span>
                             </div>
                             <div class="cart-delete">
                                 <a href="#">×</a>
                             </div>
                         </li>
-                        <li class="single-product-cart">
-                            <div class="cart-img">
-                                <a href="#"><img src="<?php echo get_theme_file_uri() . '/assets/images/cart/cart-2.jpg'?>" alt=""></a>
-                            </div>
-                            <div class="cart-title">
-                                <h4><a href="#">Smart Watch</a></h4>
-                                <span> 1 × $49.00	</span>
-                            </div>
-                            <div class="cart-delete">
-                                <a href="#">×</a>
-                            </div>
-                        </li>
+                        <?php endforeach; ?>
                     </ul>
                     <div class="cart-total">
-                        <h4>Subtotal: <span>$170.00</span></h4>
+                        <h4>Subtotal: <span>$<?= WC()->cart->total; ?></span></h4>
                     </div>
                     <div class="cart-checkout-btn">
-                        <a class="btn-hover cart-btn-style" href="cart.html">view cart</a>
-                        <a class="no-mrg btn-hover cart-btn-style" href="checkout.html">checkout</a>
+                        <a class="btn-hover cart-btn-style" href="<?= site_url('gio-hang'); ?>">view cart</a>
+                        <a class="no-mrg btn-hover cart-btn-style" href="<?= site_url('checkout'); ?>">checkout</a>
                     </div>
                 </div>
             </div>
