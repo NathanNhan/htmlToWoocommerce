@@ -30,6 +30,29 @@ jQuery('#check_box').change(function () {
 
 });
 
+login_form.click();
+
+//Code javascript for login/register page
+function show_register(e) {
+    // console.log(e.currentTarget.getAttribute('href'));
+    let lg1 = document.getElementById('lg1');
+    let lg2 = document.getElementById('lg2');
+    if (e.currentTarget.getAttribute('href') == '#lg2' && lg1.style.display == 'block') {
+        lg1.style.display = 'none';
+        lg2.style.display = 'block';
+        
+    }
+}
+
+function show_login(e) {
+    let lg1 = document.getElementById('lg1');
+    let lg2 = document.getElementById('lg2');
+    if (e.currentTarget.getAttribute('href') == '#lg1') {
+        lg1.style.display = 'block';
+        lg2.style.display = 'none';
+    }
+}
+
 
 
 

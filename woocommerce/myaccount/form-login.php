@@ -43,10 +43,10 @@ if (!defined('ABSPATH')) {
 					<div class="col-lg-7 col-md-12 ms-auto me-auto">
                         <div class="login-register-wrapper">
 							<div class="login-register-tab-list nav">
-                                <a class="active" data-bs-toggle="tab" href="#lg1">
+                                <a id="login_form" class="active" data-bs-toggle="tab" href="#lg1" onclick="show_login(event)">
                                     <h4> login </h4>
                                 </a>
-                                <a data-bs-toggle="tab" href="#lg2">
+                                <a data-bs-toggle="tab" href="#lg2" onclick="show_register(event)">
                                     <h4> register </h4>
                                 </a>
                             </div>
@@ -61,23 +61,15 @@ do_action('woocommerce_before_customer_login_form');?>
    
 	<div class="u-column1 col-1"> -->
 		<div id="lg1" class="tab-pane active">
-                                    <div class="login-form-container">
-                                        <div class="login-register-form">
+            <div class="login-form-container">
+                <div class="login-register-form">
 
-<?php endif;?>
-
-		
+		<?php endif;?>
 
 		<form class="" method="post">
 
 			<?php do_action('woocommerce_login_form_start');?>
-
-			
-				
 				<input type="text" class="woocommerce-Input woocommerce-Input--text input-text" name="username" id="username" placeholder="<?php esc_html_e("username"); ?>" autocomplete="username" value="<?php echo (!empty($_POST['username'])) ? esc_attr(wp_unslash($_POST['username'])) : ''; ?>"  aria-required="true" /><?php // @codingStandardsIgnoreLine ?>
-			
-			
-				
 				<input class="woocommerce-Input woocommerce-Input--text input-text" type="password" name="password"  id="password"  placeholder="<?php esc_html_e("password"); ?>" autocomplete="current-password" required aria-required="true" />
 			
 
@@ -100,8 +92,9 @@ do_action('woocommerce_before_customer_login_form');?>
  </div>
  </div>
 <?php if ('yes' === get_option('woocommerce_enable_myaccount_registration')): ?>
-
-	</div>
+   </div>
+   </div>
+	
      <div id="lg2" class="tab-pane">
                                     <div class="login-form-container">
                                         <div class="login-register-form">
@@ -150,7 +143,7 @@ do_action('woocommerce_before_customer_login_form');?>
 		</div>
 		</div>
 		</div>
-
+    
 	</div>
 
 </div>

@@ -537,3 +537,9 @@ button#place_order {
 a {
     font-size: 16px!important;
 }
+
+
+.search-style-1 {
+    width: 350px;
+    max-width: 350px;
+}

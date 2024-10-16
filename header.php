@@ -1,5 +1,4 @@
-<!doctype html>
-<html class="no-js" lang="en">
+<!doctype html><html class="no-js" lang="en">
 
 <head>
     <meta charset="utf-8">
@@ -43,12 +42,12 @@
                             </div>
                             <div class="header-action-wrap header-action-flex header-action-width header-action-mrg-1">
                                 <div class="search-style-1">
+                                    <?php aws_get_search_form( true ); ?>
                                     <form>
                                         <div class="form-search-1">
-                                            <input class="input-text" value="" placeholder="Type to search (Ex: Phone, Laptop)" type="search">
-                                            <button>
+                                            <!-- <button>
                                                 <i class="icofont-search-1"></i>
-                                            </button>
+                                            </button> -->
                                         </div>
                                     </form>
                                 </div>
@@ -56,7 +55,17 @@
                                     <a href="login-register.html"><i class="icofont-user-alt-3"></i></a>
                                 </div>
                                 <div class="same-style header-cart">
-                                    <a class="cart-active" href="#"><i class="icofont-shopping-cart"></i></a>
+                                    <a class="cart-active" href="<?php echo wc_get_cart_url(); ?>"><i class="icofont-shopping-cart"></i></a>
+                                     <?php foreach (WC()->cart->get_cart() as $cart_item_key => $cart_item) {
+                                                $product = $cart_item['data'];
+                                                $quantity = $cart_item['quantity'];
+                                                $price = WC()->cart->get_product_price($product);
+
+                                            }
+                                            //  print_r($product->name);
+                                            // print_r(WC()->cart->get_total())
+
+                                     ?>
                                 </div>
                             </div>
                         </div>
