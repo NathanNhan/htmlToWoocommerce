@@ -52,7 +52,3 @@ function show_login(e) {
         lg2.style.display = 'none';
     }
 }
-
-
-
-
