@@ -543,3 +543,32 @@ a {
     width: 350px;
     max-width: 350px;
 }
+
+
+
+
+.pro-pagination-style ul li span {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    color: #535353;
+    font-size: 16px;
+    text-align: center;
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+}
+
+@media only screen and (max-width: 767px) {
+    .pro-pagination-style ul li span {
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
+    }
+}
+
+.pro-pagination-style ul li span.current,
+.pro-pagination-style ul li a:hover {
+    background-color: #262626;
+    color: #fff;
+    border: 1px solid #262626;
+}

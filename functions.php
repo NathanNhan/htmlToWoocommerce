@@ -241,14 +241,14 @@ add_action('wp_ajax_nopriv_filterPriceSlider', 'filterPrice');
 function filterPrice()
 {
 //Lấy 2 giá trị min price và max price từ client
-    $current_page = isset($_POST['current_page']) ? $_POST['current_page'] : 1;
+    $paged = isset($_POST['paged']) ? $_POST['paged'] : 1;
     $min = sanitize_text_field($_POST['min_price']);
     $max = sanitize_text_field($_POST['max_price']);
 //Custom query -> truy vấn ra các sản phẩm trong giữa min và max price
 
     $args = array(
         'post_type' => 'product',
-        'paged' => (int) $current_page,
+        'paged' => (int) $paged,
         'meta_query' => array(
             array(
                 'key' => '_price',
@@ -286,40 +286,39 @@ function filterPrice()
                                          </div>
                                          </div><span id="woocommerce_loop_add_to_cart_link_describedby_ <?= get_the_ID(); ?> " class="screen-reader-text">
                                          </span>
-                                    </li>
+                </li>
 
             <?php
 }
     }
 
-    // $item = array();
-    // while ($query->have_posts()):
-    //     $query->the_post();
-    //     $item[] = array(
-    //         'ID' => get_the_ID(),
-    //         'name' => get_the_title(get_the_ID()),
-    //         'price' => wc_get_product(get_the_ID())->get_price_html(),
-    //         'regular_price' => wc_get_product(get_the_ID())->get_regular_price(),
-    //         'sale_price' => wc_get_product(get_the_ID())->get_sale_price(),
-    //         'image' => wc_get_product(get_the_ID())->get_image(),
-    //         'link' => get_the_permalink(get_the_ID()),
-    //         'stock_status' => wc_get_product(get_the_ID())->get_stock_status(),
-    //     );
+    $pages = $query->max_num_pages;
 
-    // endwhile;
+    $links = paginate_links( [
+        'base' => '%_%',
+        'format' => '?paged=%#%',
+        'total' => $pages,
+        'current' => $paged,
+        'type' => 'list',
+        'prev_next' => true,
+        'prev_text' => '<i class="icofont-long-arrow-left"></i>',
+        'next_text' => '<i class="icofont-long-arrow-right"></i>'
 
-    // total: tổng số records
-    // limit: số records hiển thị trên mỗi trang
+    ] );
+  
+        if($links) {
+            echo '<div class="pro-pagination-style text-center mt-50"';
+            echo '<ul>';
+            echo $links;
+            echo '</ul>';
+            echo '</div>';
+        }
 
-    // $total = $query->found_posts;
-    // $limit = get_option( 'posts_per_page' );
-    // $paginate = ceil($total / $limit);
-    // $results = array(
-    //     'paginate' => $paginate,
-    //     'data' => $item
-    // );
+     else {
+        echo "Sorry, We have not found any posts";
+    }
 
-    // print_r(json_encode($results));
+    
     wp_die();
 }
 
