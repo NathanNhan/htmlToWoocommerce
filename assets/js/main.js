@@ -1310,6 +1310,9 @@
     });
 
 
+  
+        
+    
 
     jQuery('.product-details-tab-small').slick({
         slidesToShow: 5,
@@ -1343,9 +1346,15 @@
     })
 
 
+   
 
 
 
+
+   
+
+     
+ 
 
 
 

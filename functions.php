@@ -352,23 +352,29 @@ add_action('wp_footer', 'bbloomer_add_cart_quantity_plus_minus');
 function bbloomer_add_cart_quantity_plus_minus()
 {
     wc_enqueue_js("
-      $('form.cart, td.product-quantity').on( 'click', 'button.plus, button.minus', function() {
-            var qty = $( this ).parents( '.quantity' ).find( '.qty' );
+      jQuery('form.cart, td.product-quantity').on( 'click', 'button.plus, button.minus', function() {
+            var qty = jQuery( this ).parents( '.quantity' ).find( '.qty' );
+            jQuery('.woocommerce-cart-form').find('button[name=update_cart]').removeAttr('disabled');
+
             var val   = parseFloat(qty.val());
+         
             var max = parseFloat(qty.attr( 'max' ));
             var min = parseFloat(qty.attr( 'min' ));
             var step = parseFloat(qty.attr( 'step' ));
+            
             if ( $( this ).is( '.plus' ) ) {
                if ( max && ( max <= val ) ) {
                   qty.val( max );
                } else {
-                  qty.val( val + step );
+                  var result = val + step;
+                  qty.val( result );
                }
             } else {
                if ( min && ( min >= val ) ) {
                   qty.val( min );
                } else if ( val > 1 ) {
-                  qty.val( val - step );
+                var result = val - step;
+                  qty.val( result);
                }
             }
          });

@@ -30,7 +30,7 @@ jQuery('#check_box').change(function () {
 
 });
 
-login_form.click();
+// login_form.click();
 
 //Code javascript for login/register page
 function show_register(e) {
