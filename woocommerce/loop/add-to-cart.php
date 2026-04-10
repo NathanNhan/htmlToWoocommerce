@@ -21,6 +21,7 @@ if (!defined('ABSPATH')) {
 
 global $product;
 
+
 echo apply_filters(
     'woocommerce_loop_add_to_cart_link', // WPCS: XSS ok.
     sprintf(    '
@@ -36,9 +37,10 @@ echo apply_filters(
         <div class="product-action-cart">
             <a href="%s" aria-describedby="woocommerce_loop_add_to_cart_link_describedby_%s" data-quantity="%s" class="%s" %s>%s</a>
         </div>
-        <button data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="icon-zoom"></i></button>
+        <button class="quickview" data-bs-toggle="modal" data-bs-target="#exampleModal" id="%s"><i class="icon-zoom"></i></button>
         <button title="Add to Compare"><i class="icon-compare"></i></button>
-        <button title="Add to Wishlist"><i class="icon-heart-empty"></i></button>
+        <button class="like-btn" data-id="%s" title="Add to Wishlist"><i class="icon-heart-empty"></i></button>
+        
     </div>
 </div>',
         esc_url(get_permalink( $product->get_id() )), 
@@ -50,12 +52,18 @@ echo apply_filters(
         esc_attr(isset($args['quantity']) ? $args['quantity'] : 1),
         esc_attr(isset($args['class']) ? $args['class'] : 'button'),
         isset($args['attributes']) ? wc_implode_html_attributes($args['attributes']) : '',
-        esc_html($product->add_to_cart_text())
+        esc_html($product->add_to_cart_text()),
+        esc_attr($product->get_id()),
+        esc_attr($product->get_id()),
+        
+        
+        
     ),
     $product,
     $args
 );
 ?>
-<span id="woocommerce_loop_add_to_cart_link_describedby_<?php echo esc_attr($product->get_id()); ?>" class="screen-reader-text">
-	<?php echo esc_html($args['aria-describedby_text']); ?>
+<span id="woocommerce_loop_add_to_cart_link_describedby_<?php echo esc_attr($product->get_id()); ?>"
+    class="screen-reader-text">
+    <?php echo esc_html($args['aria-describedby_text']); ?>
 </span>

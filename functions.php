@@ -45,6 +45,12 @@ function load_assets()
         "baseURL" => admin_url("admin-ajax.php"),
     ));
 
+
+    wp_enqueue_script("wishlist.js", get_theme_file_uri() . '/assets/js/wishlist.js', array('jquery'), '1.0.0', true);
+    wp_localize_script("wishlist.js", "ajaxurl", array(
+        "wishlist" => admin_url("admin-ajax.php"),
+    ));
+
     wp_enqueue_script("myjs.js", get_theme_file_uri() . '/assets/js/my_javascript.js', array('jquery'), '1.02', true);
 
 }
@@ -540,3 +546,193 @@ function create_new_guest()
 
 add_action('wp_ajax_nopriv_createGuest', 'create_new_guest');
 add_action('wp_ajax_createGuest', 'create_new_guest');
+
+
+//handle quick view
+function quick_view_product() {
+    $product = array();
+    if(isset($_POST['id'])) {
+        $product = wc_get_product($_POST['id']);
+    }
+    $attributes_color = '';
+    $arr_colors = [];
+    if(isset($product) &&  $product->get_attribute('pa_color') != "") {
+        $attributes_color = $product->get_attribute('pa_color');
+        $arr_colors = explode(",",$attributes_color);
+    }
+    $attributes_size = '';
+    $arr_size = [];
+    if(isset($product) &&  $product->get_attribute('pa_size') != "") {
+        $attributes_size = $product->get_attribute('pa_size'); 
+        $arr_size = explode(",",$attributes_size);
+    }
+    print_r($arr_colors);
+    ?>
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-lg-5 col-md-5 col-12 col-sm-6">
+                                <div class="quickview-img">
+                                    <!-- <img src="<?php echo get_theme_file_uri() . '/assets/images/product/product-3.jpg'?>" alt=""> -->
+                                     <?= $product->get_image(); ?>
+                                </div>
+                            </div>
+                            <div class="col-lg-7 col-md-7 col-12 col-sm-6">
+                                <div class="product-details-content quickview-content">
+                                    <h2><?= $product->get_name(); ?></h2>
+                                    <div class="product-ratting-review-wrap">
+                                        <div class="product-ratting-digit-wrap">
+                                            <div class="product-ratting">
+                                                <i class="icon-rating"></i>
+                                                <i class="icon-rating"></i>
+                                                <i class="icon-rating"></i>
+                                                <i class="icon-rating"></i>
+                                                <i class="icon-star-empty"></i>
+                                            </div>
+                                            <div class="product-digit">
+                                                <span><?= $product->get_average_rating(); ?></span>
+                                            </div>
+                                        </div>
+                                        <div class="product-review-order">
+                                            <span><?= $product->get_review_count() ?> Reviews</span>
+                                            <span><?= $product->get_total_sales(); ?> orders</span>
+                                        </div>
+                                    </div>
+                                    <p><?= $product->get_short_description(); ?></p>
+                                    <div class="pro-details-price">
+                                        <span><?= $product->get_sale_price(); ?></span>
+                                        <span class="old-price"><?= $product->get_regular_price(); ?></span>
+                                    </div>
+                                    <div class="pro-details-color-wrap">
+                                        <span>Color:</span>
+                                        <div class="pro-details-color-content">
+                                            <ul>
+                                                <li><a class="white" href="#">Black</a></li>
+                                                <li><a class="azalea" href="#">Blue</a></li>
+                                                <li><a class="dolly" href="#">Green</a></li>
+                                                <li><a class="peach-orange" href="#">Orange</a></li>
+                                                <li><a class="mona-lisa active" href="#">Pink</a></li>
+                                                <li><a class="cupid" href="#">gray</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="pro-details-size">
+                                        <span>Size:</span>
+                                        <div class="pro-details-size-content">
+                                            <ul>
+                                                <li><a href="#">XS</a></li>
+                                                <li><a href="#">S</a></li>
+                                                <li><a href="#">M</a></li>
+                                                <li><a href="#">L</a></li>
+                                                <li><a href="#">XL</a></li>
+                                                <li><a href="#">XXL</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="pro-details-quality">
+                                        <span>Quantity:</span>
+                                        <div class="cart-plus-minus">
+                                            <input readonly class="cart-plus-minus-box" type="text" name="qtybutton" value="<?= $product->get_stock_quantity(); ?>">
+                                        </div>
+                                    </div>
+                                    <div class="product-details-meta">
+                                        <ul>
+                                            <li><span>Model:</span> <a href="#"><?= $product->get_sku(); ?></a></li>
+                                            <!-- <li><span>Ship To</span> <a href="#">2834 Laurel Lane</a>, <a href="#">Mentone</a> , <a href="#">Texas</a></li> -->
+                                        </ul>
+                                    </div>
+                                    <div class="pro-details-action-wrap">
+                                        <div class="pro-details-buy-now">
+                                            <a href="<?= $product->add_to_cart_url(); ?>">Buy Now</a>
+                                        </div>
+                                        <div class="pro-details-action">
+                                            <a title="Add to Cart" href="#"><i class="icon-basket"></i></a>
+                                            <a title="Add to Wishlist" href="#"><i class="icon-heart"></i></a>
+                                            <a class="social" title="Social" href="#"><i class="icon-share"></i></a>
+                                            <div class="product-dec-social">
+                                                <a class="facebook" title="Facebook" href="#"><i class="icon-social-facebook-square"></i></a>
+                                                <a class="twitter" title="Twitter" href="#"><i class="icon-social-twitter"></i></a>
+                                                <a class="instagram" title="Instagram" href="#"><i class="icon-social-instagram"></i></a>
+                                                <a class="pinterest" title="Pinterest" href="#"><i class="icon-social-pinterest"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+   <?php 
+}
+
+add_action('wp_ajax_nopriv_quickview', 'quick_view_product');
+add_action('wp_ajax_quickview', 'quick_view_product');
+
+
+
+//add to wishlist / like product
+
+
+
+
+add_action('wp_ajax_get_wishlist_products', 'tn_get_wishlist_products');
+add_action('wp_ajax_nopriv_get_wishlist_products', 'tn_get_wishlist_products');
+
+function tn_get_wishlist_products() {
+    $ids = isset($_POST['ids']) ? array_map('intval', $_POST['ids']) : array();
+
+    if (empty($ids)) {
+        wp_send_json_error('No products found');
+    }
+
+    $args = array(
+        'post_type' => 'product',
+        'post__in'  => $ids,
+        'posts_per_page' => -1,
+        'orderby' => 'post__in'
+    );
+
+    $query = new WP_Query($args);
+    $html = '';
+
+    if ($query->have_posts()) {
+        while ($query->have_posts()) {
+            $query->the_post();
+            $product = wc_get_product(get_the_ID());
+            
+            $html .= '<tr>';
+            $html .= '<td class="cart-product">
+                        <div class="product-img-info-wrap">
+                            <div class="product-img">
+                                <a href="'.get_permalink().'">'.get_the_post_thumbnail(get_the_ID(), 'thumbnail').'</a>
+                            </div>
+                            <div class="product-info">
+                                <h4><a href="'.get_permalink().'">'.get_the_title().'</a></h4>
+                            </div>
+                        </div>
+                      </td>';
+            $html .= '<td class="product-price"><span class="amount">'.$product->get_price_html().'</span></td>';
+            $html .= '<td class="th-text-center">'.($product->is_in_stock() ? 'Còn hàng' : 'Hết hàng').'</td>';
+            $html .= '<td class="product-wishlist-cart">
+                        <a href="'.get_permalink().'">Add To Cart</a>
+                      </td>';
+            $html .= '<td class="th-text-center">
+                        <a href="#" class="remove-wishlist" data-id="'.get_the_ID().'">❌</a>
+                      </td>';
+            $html .= '</tr>';
+        }
+        wp_reset_postdata();
+    }
+
+    wp_send_json_success($html);
+}
+

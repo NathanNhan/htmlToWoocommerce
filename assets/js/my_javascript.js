@@ -52,3 +52,21 @@ function show_login(e) {
         lg2.style.display = 'none';
     }
 }
+
+
+
+//quick view 
+jQuery('.quickview').click(function(e) {
+    console.log(e.currentTarget.getAttribute('id'));
+    var data = {
+        action: "quickview",
+        id: e.currentTarget.getAttribute('id')
+    }
+
+    jQuery.post(ajaxurl.baseURL, data, function (res) {
+        // var result = jQuery.parseJSON(res);
+        console.log(res);
+        
+
+    });
+})
