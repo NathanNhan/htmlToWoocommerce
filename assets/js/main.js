@@ -1128,234 +1128,235 @@
     /*---------------------
         Price range
     --------------------- */
-    var sliderrange = jQuery('#slider-range');
-    var amountprice = jQuery('#amount');
-    jQuery(function () {
-        sliderrange.slider({
-            range: true,
-            min: 5,
-            max: 45,
-            values: [0, 45],
-            slide: function (event, ui) {
-                amountprice.val("$" + ui.values[0] + " -$ " + ui.values[1]);
-                callAjaxFilterPagination();
-            }
-        });
-        amountprice.val("$" + sliderrange.slider("values", 0) +
-            "-$" + sliderrange.slider("values", 1));
-        
-        //Call pagination ajax 
-        jQuery('.products.columns-3').on('click', '.pro-pagination-style a', function(e) {
-            e.preventDefault();
-            var paged = /[\?&]paged=(\d+)/.test(this.href) && RegExp.$1;
-            console.log(paged);
-            callAjaxFilterPagination(paged);
-        })
-
-        function callAjaxFilterPagination (pageNum) {
-            //Hide pagination default
-            jQuery('.pro-pagination-style').hide();
-            //Call Ajax jquery
-            var object_data = {
-                action: "filterPriceSlider",
-                paged: pageNum || 1,
-                min_price: sliderrange.slider("values", 0),
-                max_price: sliderrange.slider("values", 1)
-            }
-
-            jQuery.post(ajaxurl.baseURL, object_data, function (res) {
-                // var result = jQuery.parseJSON(res);
-                console.log(res);
-                jQuery(".products.columns-3").html(res);
-
-            });
-        }
-    });
-
-
-    /*---------------------
-        Video popup
-    --------------------- */
-    jQuery('.video-popup').magnificPopup({
-        type: 'iframe',
-        mainClass: 'mfp-fade',
-        removalDelay: 160,
-        preloader: false,
-        zoom: {
-            enabled: true,
-        }
-    });
-
-
-    /*-------------------------------------
-        checkout one click toggle function
-    ---------------------------------------*/
-    var checked = jQuery('.sin-payment input:checked')
-    if (checked) {
-        jQuery(checked).siblings('.payment-box').slideDown(900);
-    };
-    jQuery('.sin-payment input').on('change', function () {
-        jQuery('.payment-box').slideUp(900);
-        jQuery(this).siblings('.payment-box').slideToggle(900);
-    });
-
-
-    /*-----------------------
-        Shop filter active 
-    ------------------------- */
-    jQuery('.shop-filter-active').on('click', function (e) {
-        e.preventDefault();
-        jQuery('.product-filter-wrapper').slideToggle();
-    })
-    var shopFiltericon = jQuery('.shop-filter-active');
-    shopFiltericon.on('click', function () {
-        jQuery('.shop-filter-active').toggleClass('active');
-    })
-
-
-
-
-    /*--
-        Product details slider 2
-    -----------------------------------*/
-    jQuery('.pro-dec-big-img-slider-2').slick({
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        arrows: false,
-        draggable: false,
-        fade: false,
-        asNavFor: '.product-dec-slider-2',
-    });
-
-    /*--
-        Product details 2 slick carousel as Nav
-    --------------------------------------------*/
-    jQuery('.product-dec-slider-2').slick({
-        slidesToShow: 7,
-        slidesToScroll: 1,
-        vertical: true,
-        asNavFor: '.pro-dec-big-img-slider-2',
-        dots: false,
-        focusOnSelect: true,
-        fade: false,
-        arrows: false,
-        responsive: [
-            {
-                breakpoint: 1199,
-                settings: {
-                    slidesToShow: 5,
-                    slidesToScroll: 1,
-                }
-            },
-            {
-                breakpoint: 991,
-                settings: {
-                    slidesToShow: 7,
-                    slidesToScroll: 1,
-                }
-            },
-            {
-                breakpoint: 767,
-                settings: {
-                    slidesToShow: 5,
-                    slidesToScroll: 1,
-                }
-            },
-            {
-                breakpoint: 575,
-                settings: {
-                    autoplay: true,
-                    slidesToShow: 3,
-                }
-            }
-        ]
-    });
-
-
-    // Instantiate EasyZoom instances
-    var jQueryeasyzoom = jQuery('.easyzoom').easyZoom();
-
-
-    /*--------------------------------
-        Product details slider 5 active
-    -----------------------------------*/
-    jQuery('.product-details-slider-5-active').slick({
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        dots: false,
-        loop: true,
-        fade: false,
-        arrows: false,
-    });
-
-    /*--------------------------------
-        Product details tab small
-    -----------------------------------*/
-    jQuery('.product-details-tab-small').slick({
-        slidesToShow: 5,
-        slidesToScroll: 1,
-        dots: false,
-        loop: true,
-        fade: false,
-        arrows: false,
-        responsive: [
-            {
-                breakpoint: 767,
-                settings: {
-                    slidesToShow: 3,
-                    slidesToScroll: 1,
-                }
-            }
-        ]
-    });
-
-
-  
-        
     
+    // var sliderrange = jQuery('#slider-range');
+    // var amountprice = jQuery('#amount');
+    // jQuery(function () {
+    //     sliderrange.slider({
+    //         range: true,
+    //         min: 5,
+    //         max: 45,
+    //         values: [0, 45],
+    //         slide: function (event, ui) {
+    //             amountprice.val("$" + ui.values[0] + " -$ " + ui.values[1]);
+    //             callAjaxFilterPagination();
+    //         }
+    //     });
+    // amountprice.val("$" + sliderrange.slider("values", 0) +
+    //     "-$" + sliderrange.slider("values", 1));
 
-    jQuery('.product-details-tab-small').slick({
-        slidesToShow: 5,
-        slidesToScroll: 1,
-        dots: false,
-        loop: true,
-        fade: false,
-        arrows: false,
-        responsive: [
-            {
-                breakpoint: 767,
-                settings: {
-                    slidesToShow: 3,
-                    slidesToScroll: 1,
-                }
+    //Call pagination ajax 
+    // jQuery('.products.columns-3').on('click', '.pro-pagination-style a', function(e) {
+    //     e.preventDefault();
+    //     var paged = /[\?&]paged=(\d+)/.test(this.href) && RegExp.$1;
+    //     console.log(paged);
+    //     callAjaxFilterPagination(paged);
+    // })
+
+    // function callAjaxFilterPagination (pageNum) {
+    //     //Hide pagination default
+    //     jQuery('.pro-pagination-style').hide();
+    //     //Call Ajax jquery
+    //     var object_data = {
+    //         action: "filterPriceSlider",
+    //         paged: pageNum || 1,
+    //         min_price: sliderrange.slider("values", 0),
+    //         max_price: sliderrange.slider("values", 1)
+    //     }
+
+    //     jQuery.post(ajaxurl.baseURL, object_data, function (res) {
+    //         // var result = jQuery.parseJSON(res);
+    //         console.log(res);
+    //         jQuery(".products.columns-3").html(res);
+
+    //     });
+    // }
+});
+
+
+/*---------------------
+    Video popup
+--------------------- */
+jQuery('.video-popup').magnificPopup({
+    type: 'iframe',
+    mainClass: 'mfp-fade',
+    removalDelay: 160,
+    preloader: false,
+    zoom: {
+        enabled: true,
+    }
+});
+
+
+/*-------------------------------------
+    checkout one click toggle function
+---------------------------------------*/
+var checked = jQuery('.sin-payment input:checked')
+if (checked) {
+    jQuery(checked).siblings('.payment-box').slideDown(900);
+};
+jQuery('.sin-payment input').on('change', function () {
+    jQuery('.payment-box').slideUp(900);
+    jQuery(this).siblings('.payment-box').slideToggle(900);
+});
+
+
+/*-----------------------
+    Shop filter active 
+------------------------- */
+jQuery('.shop-filter-active').on('click', function (e) {
+    e.preventDefault();
+    jQuery('.product-filter-wrapper').slideToggle();
+})
+var shopFiltericon = jQuery('.shop-filter-active');
+shopFiltericon.on('click', function () {
+    jQuery('.shop-filter-active').toggleClass('active');
+})
+
+
+
+
+/*--
+    Product details slider 2
+-----------------------------------*/
+jQuery('.pro-dec-big-img-slider-2').slick({
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    arrows: false,
+    draggable: false,
+    fade: false,
+    asNavFor: '.product-dec-slider-2',
+});
+
+/*--
+    Product details 2 slick carousel as Nav
+--------------------------------------------*/
+jQuery('.product-dec-slider-2').slick({
+    slidesToShow: 7,
+    slidesToScroll: 1,
+    vertical: true,
+    asNavFor: '.pro-dec-big-img-slider-2',
+    dots: false,
+    focusOnSelect: true,
+    fade: false,
+    arrows: false,
+    responsive: [
+        {
+            breakpoint: 1199,
+            settings: {
+                slidesToShow: 5,
+                slidesToScroll: 1,
             }
-        ]
-    });
-
-    /*--------------------------
-        Tab active
-    ---------------------------- */
-    var ProductDetailsSmall = jQuery('.product-details-tab-small a');
-    ProductDetailsSmall.on('click', function (e) {
-        e.preventDefault();
-        var jQueryhref = jQuery(this).attr('href');
-        ProductDetailsSmall.removeClass('active');
-        jQuery(this).addClass('active');
-        jQuery('.product-details-tab-large .tab-pane').removeClass('active');
-        jQuery('.product-details-tab-large ' + jQueryhref).addClass('active');
-    })
-
-
-   
-
-
-
-
-   
-
-     
- 
+        },
+        {
+            breakpoint: 991,
+            settings: {
+                slidesToShow: 7,
+                slidesToScroll: 1,
+            }
+        },
+        {
+            breakpoint: 767,
+            settings: {
+                slidesToShow: 5,
+                slidesToScroll: 1,
+            }
+        },
+        {
+            breakpoint: 575,
+            settings: {
+                autoplay: true,
+                slidesToShow: 3,
+            }
+        }
+    ]
+});
 
 
+// Instantiate EasyZoom instances
+var jQueryeasyzoom = jQuery('.easyzoom').easyZoom();
 
-})(jQuery);
+
+/*--------------------------------
+    Product details slider 5 active
+-----------------------------------*/
+jQuery('.product-details-slider-5-active').slick({
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    dots: false,
+    loop: true,
+    fade: false,
+    arrows: false,
+});
+
+/*--------------------------------
+    Product details tab small
+-----------------------------------*/
+jQuery('.product-details-tab-small').slick({
+    slidesToShow: 5,
+    slidesToScroll: 1,
+    dots: false,
+    loop: true,
+    fade: false,
+    arrows: false,
+    responsive: [
+        {
+            breakpoint: 767,
+            settings: {
+                slidesToShow: 3,
+                slidesToScroll: 1,
+            }
+        }
+    ]
+});
+
+
+
+
+
+
+jQuery('.product-details-tab-small').slick({
+    slidesToShow: 5,
+    slidesToScroll: 1,
+    dots: false,
+    loop: true,
+    fade: false,
+    arrows: false,
+    responsive: [
+        {
+            breakpoint: 767,
+            settings: {
+                slidesToShow: 3,
+                slidesToScroll: 1,
+            }
+        }
+    ]
+});
+
+/*--------------------------
+    Tab active
+---------------------------- */
+var ProductDetailsSmall = jQuery('.product-details-tab-small a');
+ProductDetailsSmall.on('click', function (e) {
+    e.preventDefault();
+    var jQueryhref = jQuery(this).attr('href');
+    ProductDetailsSmall.removeClass('active');
+    jQuery(this).addClass('active');
+    jQuery('.product-details-tab-large .tab-pane').removeClass('active');
+    jQuery('.product-details-tab-large ' + jQueryhref).addClass('active');
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}) (jQuery);

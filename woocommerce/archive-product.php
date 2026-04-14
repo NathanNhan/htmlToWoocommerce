@@ -217,7 +217,7 @@ do_action('woocommerce_after_main_content');
 ?>
 
                     </div>
-                   <?php get_sidebar(); ?>
+                   <?php echo do_shortcode('[custom_sidebar_filter]'); ?>
                 </div>
             </div>
         </div>

@@ -736,3 +736,196 @@ function tn_get_wishlist_products() {
     wp_send_json_success($html);
 }
 
+
+
+
+
+function custom_sidebar_product_filter() {
+    // 1. Lấy dữ liệu hiện tại từ URL để đánh dấu trạng thái "Active"
+    $current_cat   = isset($_GET['f_cat']) ? $_GET['f_cat'] : '';
+    $current_color = isset($_GET['f_color']) ? $_GET['f_color'] : '';
+    $current_size  = isset($_GET['f_size']) ? $_GET['f_size'] : '';
+    $current_price = isset($_GET['f_price']) ? $_GET['f_price'] : '';
+    // Xử lý giá min/max từ URL
+    $min_price = isset($_GET['min_price']) ? intval($_GET['min_price']) : 0;
+    $max_price = isset($_GET['max_price']) ? intval($_GET['max_price']) : 100000; // Giá tối đa mặc định
+
+    // Hàm hỗ trợ tạo link lọc nhanh
+    function get_filter_link($param, $value) {
+        $link = strtok($_SERVER["REQUEST_URI"], '?');
+        $query = $_GET;
+        // $query = [
+        //     "f_cat" => "clothing",
+        // ];
+        if ($value) {
+            $query[$param] = $value;
+        } else {
+            unset($query[$param]);
+        }
+        // Giữ lại các tham số lọc khác khi nhấn vào một lọc mới
+        return add_query_arg($query, $link);
+    }
+
+    ob_start(); ?>
+    <div class="col-lg-3">
+        <div class="shop-sidebar-style">
+            
+            <div class="sidebar-widget">
+                <h4 class="pro-sidebar-title">Categories</h4>
+                <div class="sidebar-widget-categori mt-45 mb-70">
+                    <ul>
+                        <li><a href="<?php echo get_filter_link('f_cat', ''); ?>">All</a></li>
+                        <?php
+                        $categories = get_terms('product_cat', array('hide_empty' => true));
+                        foreach ($categories as $cat) :
+                            $active = ($current_cat == $cat->slug) ? 'active' : '';
+                            echo '<li><a class="'.$active.'" href="'.get_filter_link('f_cat', $cat->slug).'">'.$cat->name.'</a></li>';
+                        endforeach; ?>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="sidebar-widget">
+                <h4 class="pro-sidebar-title">Filter By Color</h4>
+                <div class="pro-details-color-content sidebar-widget-color mt-45 mb-70">
+                    <ul>
+                        <?php
+                        $colors = get_terms('pa_color', array('hide_empty' => true));
+                        foreach ($colors as $color) :
+                            $active = ($current_color == $color->slug) ? 'active' : '';
+                            echo '<li><a class="'.$color->slug.' '.$active.'" href="'.get_filter_link('f_color', $color->slug).'">'.'</a></li>';
+                        endforeach; ?>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="sidebar-widget">
+                <h4 class="pro-sidebar-title">Filter By Price Range</h4>
+                <div class="price-filter mt-55 mb-65">
+                    <div id="slider-range"></div>
+                    <div class="price-slider-amount">
+                        <div class="label-input">
+                            <span>Price: </span>
+                            <input type="text" id="amount" name="price" readonly placeholder="Add Your Price" />
+                        </div>
+                        <form id="price-filter-form" method="GET" action="<?php echo strtok($_SERVER["REQUEST_URI"], '?'); ?>">
+                            <?php if($current_cat): ?><input type="hidden" name="f_cat" value="<?php echo $current_cat; ?>"><?php endif; ?>
+                            <?php if($current_color): ?><input type="hidden" name="f_color" value="<?php echo $current_color; ?>"><?php endif; ?>
+                            <?php if($current_size): ?><input type="hidden" name="f_size" value="<?php echo $current_size; ?>"><?php endif; ?>
+                            
+                            <input type="hidden" id="min_price" name="min_price" value="<?php echo $min_price; ?>">
+                            <input type="hidden" id="max_price" name="max_price" value="<?php echo $max_price; ?>">
+                            <button type="submit" class="btn-filter" style="margin-top:15px; background:#333; color:#fff; border:none; padding:5px 15px; cursor:pointer;">Filter Now</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+   
+
+    
+    <?php
+    return ob_get_clean();
+}
+add_shortcode('custom_sidebar_filter', 'custom_sidebar_product_filter');
+
+add_action('wp_footer', function() {
+    ?>
+    <script type="text/javascript">
+    (function($) {
+        "use strict";
+        
+        // Hàm kiểm tra định kỳ xem thư viện đã sẵn sàng chưa
+        var checkSliderLibrary = setInterval(function() {
+            if ($.isFunction($.fn.slider)) {
+                clearInterval(checkSliderLibrary); // Dừng kiểm tra khi đã thấy thư viện
+                
+                var minVal = parseInt($("#min_price").val()) || 0;
+                var maxVal = parseInt($("#max_price").val()) || 100000;
+
+                $("#slider-range").slider({
+                    range: true,
+                    min: 0,
+                    max: 100000,
+                    values: [minVal, maxVal],
+                    slide: function(event, ui) {
+                        $("#amount").val(ui.values[0].toLocaleString() + "đ - " + ui.values[1].toLocaleString() + "đ");
+                        $("#min_price").val(ui.values[0]);
+                        $("#max_price").val(ui.values[1]);
+                    }
+                });
+                
+                $("#amount").val($("#slider-range").slider("values", 0).toLocaleString('vi-VN') + "đ - " + $("#slider-range").slider("values", 1).toLocaleString("vi-VN") + "đ");
+                console.log("Slider initialized successfully!");
+            }
+        }, 100); // Kiểm tra mỗi 0.1 giây
+
+    })(jQuery);
+    </script>
+    <?php
+}, 999);
+
+
+
+add_action( 'woocommerce_product_query', 'custom_force_product_filter_logic', 999 );
+
+function custom_force_product_filter_logic( $query ) {
+    if ( is_admin() ) return;
+
+    // Lấy các giá trị từ URL
+    $min = isset($_GET['min_price']) ? intval($_GET['min_price']) : '';
+    $max = isset($_GET['max_price']) ? intval($_GET['max_price']) : '';
+    
+    $f_cat = isset($_GET['f_cat']) ? sanitize_text_field($_GET['f_cat']) : '';
+    $f_color = isset($_GET['f_color']) ? sanitize_text_field($_GET['f_color']) : '';
+    $f_size = isset($_GET['f_size']) ? sanitize_text_field($_GET['f_size']) : '';
+
+    $meta_query = (array) $query->get( 'meta_query' );
+    $tax_query  = (array) $query->get( 'tax_query' );
+
+    
+
+    // 1. ÉP LỌC GIÁ (Cách này can thiệp sâu vào tầng meta của Woo)
+    if ( $min !== '' && $max !== '' ) {
+        $meta_query[] = array(
+            'key'     => '_price',
+            'value'   => array( $min, $max ),
+            'compare' => 'BETWEEN',
+            'type'    => 'NUMERIC',
+        );
+    }
+
+    // 2. ÉP LỌC CHUYÊN MỤC
+    if ( ! empty( $f_cat ) ) {
+        $tax_query[] = array(
+            'taxonomy' => 'product_cat',
+            'field'    => 'slug',
+            'terms'    => $f_cat,
+            'operator' => 'IN',
+        );
+    }
+
+    // 3. ÉP LỌC THUỘC TÍNH (Màu sắc & Kích thước)
+    if ( ! empty( $f_color ) ) {
+        $tax_query[] = array(
+            'taxonomy' => 'pa_color',
+            'field'    => 'slug',
+            'terms'    => $f_color,
+            'operator' => 'IN',
+        );
+    }
+    
+    if ( ! empty( $f_size ) ) {
+        $tax_query[] = array(
+            'taxonomy' => 'pa_size',
+            'field'    => 'slug',
+            'terms'    => $f_size,
+            'operator' => 'IN',
+        );
+    }
+
+    $query->set( 'meta_query', $meta_query );
+    $query->set( 'tax_query', $tax_query );
+}
