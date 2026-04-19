@@ -147,7 +147,7 @@ get_header('shop');
  * @hooked WC_Structured_Data::generate_website_data() - 30
  */
 do_action('woocommerce_before_main_content');
-
+                        
 /**
  * Hook: woocommerce_shop_loop_header.
  *
@@ -191,7 +191,8 @@ if (woocommerce_product_loop()) {
      * @hooked woocommerce_pagination - 10
      */
     do_action('woocommerce_after_shop_loop');
-    custom_pagination();
+    // custom_pagination(); 
+   
 } else {
     /**
      * Hook: woocommerce_no_products_found.
@@ -200,6 +201,7 @@ if (woocommerce_product_loop()) {
      */
     do_action('woocommerce_no_products_found');
 }
+     
 
 /**
  * Hook: woocommerce_after_main_content.
@@ -217,10 +219,10 @@ do_action('woocommerce_after_main_content');
 ?>
 
                     </div>
-                   <?php echo do_shortcode('[custom_sidebar_filter]'); ?>
+                   <?php echo do_shortcode('[custom_sidebar_filter_ajax]'); ?>
                 </div>
             </div>
         </div>
-            
+             
 <?php
 get_footer('shop');

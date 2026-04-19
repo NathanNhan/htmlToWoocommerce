@@ -929,3 +929,247 @@ function custom_force_product_filter_logic( $query ) {
     $query->set( 'meta_query', $meta_query );
     $query->set( 'tax_query', $tax_query );
 }
+
+
+
+
+
+
+
+
+//filter products with AJAX
+// 1. Thêm bọc thẻ cho nội dung sidebar (Sửa lại shortcode)
+function custom_sidebar_product_filter_ajax() {
+     $current_cat   = '';
+     $current_color = '';
+     $min_price = 0;
+     $max_price = 100000;
+
+    ob_start(); ?>
+    <div class="col-lg-3">
+        <div class="shop-sidebar-style" id="ajax-filter-container">
+            <div class="sidebar-widget">
+                <h4 class="pro-sidebar-title">Categories</h4>
+                <div class="sidebar-widget-categori mt-45 mb-70">
+                    <ul class="filter-list" data-filter="f_cat">
+                        <li><a href="#" data-value="">All</a></li>
+                        <?php
+                        $categories = get_terms('product_cat', array('hide_empty' => true));
+                        foreach ($categories as $cat) :
+                            $active = ($current_cat == $cat->slug) ? 'active' : '';
+                            echo '<li><a class="'.$active.'" href="#" data-value="'.$cat->slug.'">'.$cat->name.'</a></li>';
+                        endforeach; ?>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="sidebar-widget">
+                <h4 class="pro-sidebar-title">Filter By Color</h4>
+                <div class="pro-details-color-content sidebar-widget-color mt-45 mb-70">
+                    <ul class="filter-list" data-filter="f_color">
+                        <?php
+                        $colors = get_terms('pa_color', array('hide_empty' => true));
+                        foreach ($colors as $color) :
+                            $active = ($current_color == $color->slug) ? 'active' : '';
+                            echo '<li><a class="'.$color->slug.' '.$active.'" href="#" data-value="'.$color->slug.'"></a></li>';
+                        endforeach; ?>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="sidebar-widget">
+                <h4 class="pro-sidebar-title">Filter By Price Range</h4>
+                <div class="price-filter mt-55 mb-65">
+                    <div id="slider-range"></div>
+                    <div class="price-slider-amount">
+                        <div class="label-input">
+                            <span>Price: </span>
+                            <input type="text" id="amount" readonly />
+                        </div>
+                        <input type="hidden" id="min_price" value="<?php echo $min_price; ?>">
+                        <input type="hidden" id="max_price" value="<?php echo $max_price; ?>">
+                        <button type="button" class="btn-filter ajax-trigger-filter" style="margin-top:15px; background:#333; color:#fff; border:none; padding:5px 15px; cursor:pointer;">Filter Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php
+    return ob_get_clean();
+}
+add_shortcode('custom_sidebar_filter_ajax', 'custom_sidebar_product_filter_ajax');
+
+// 2. Xử lý AJAX trả về danh sách sản phẩm
+add_action('wp_ajax_filter_products', 'ajax_filter_products_handler');
+add_action('wp_ajax_nopriv_filter_products', 'ajax_filter_products_handler');
+
+function ajax_filter_products_handler() {
+    $min = isset($_POST['min_price']) ? intval($_POST['min_price']) : 0;
+    $max = isset($_POST['max_price']) ? intval($_POST['max_price']) : 100000;
+    $f_cat = isset($_POST['f_cat']) ? sanitize_text_field($_POST['f_cat']) : '';
+    $f_color = isset($_POST['f_color']) ? sanitize_text_field($_POST['f_color']) : '';
+    // Lấy số trang hiện tại từ AJAX
+    $paged = isset($_POST['paged']) ? intval($_POST['paged']) : 1;
+    
+
+    $args = array(
+        'post_type' => 'product',
+        'posts_per_page' => 12,
+        'paged'          => $paged,
+        'status' => 'publish',
+        'meta_query' => array(
+            array(
+                'key' => '_price',
+                'value' => array($min, $max),
+                'compare' => 'BETWEEN',
+                'type' => 'NUMERIC'
+            )
+        ),
+        'tax_query' => array('relation' => 'AND')
+    );
+
+    if ($f_cat) {
+        $args['tax_query'][] = array('taxonomy' => 'product_cat', 'field' => 'slug', 'terms' => $f_cat);
+    }
+    if ($f_color) {
+        $args['tax_query'][] = array('taxonomy' => 'pa_color', 'field' => 'slug', 'terms' => $f_color);
+    }
+
+    $loop = new WP_Query($args);
+    
+    if ($loop->have_posts()) {
+        echo '<div class="row">'; // Tùy chỉnh class này theo theme của bạn
+        while ($loop->have_posts()) : $loop->the_post();
+            wc_get_template_part('content', 'product');
+        endwhile;
+        echo '</div>';
+
+        // Hiển thị phân trang
+        echo '<div class="ajax-pagination-wrapper mt-40">';
+        echo paginate_links(array(
+            'base'      => '%_%',
+            'format'    => '?paged=%#%',
+            'current'   => $paged,
+            'total'     => $loop->max_num_pages,
+            'prev_text' => '&laquo;',
+            'next_text' => '&raquo;',
+            'type'      => 'list',
+        ));
+        echo '</div>';
+    } else {
+        echo '<p>No products found.</p>';
+    }
+    wp_reset_postdata();
+    die();
+}
+
+
+
+add_action('wp_footer', function() {
+    ?>
+    <script type="text/javascript">
+
+    (function($) {
+        "use strict";
+
+        // Cấu hình ID vùng chứa sản phẩm (CẦN KIỂM TRA LẠI CLASS/ID TRONG THEME)
+        var $productContainer = $('.products'); 
+
+        function loadProducts(page = 1) {
+            var data = {
+                action: 'filter_products',
+                f_cat: $('.sidebar-widget-categori a.active').data('value') || '',
+                f_color: $('.pro-details-color-content a.active').data('value') || '',
+                min_price: $("#min_price").val(),
+                max_price: $("#max_price").val(),
+                paged: page
+            };
+
+            $productContainer.css('opacity', '0.5'); // Hiệu ứng loading
+
+            $.ajax({
+                url: '<?php echo admin_url('admin-ajax.php'); ?>',
+                type: 'POST',
+                data: data,
+                success: function(response) {
+                    $productContainer.html(response).css('opacity', '1');
+                }
+            });
+        }
+
+        // Bắt sự kiện Click vào Category/Color
+        $(document).on('click', '.filter-list a, .pro-details-color-content a', function(e) {
+            e.preventDefault();
+            $(this).closest('ul').find('a').removeClass('active');
+            $(this).addClass('active');
+            loadProducts(1);
+        });
+
+        // Bắt sự kiện Nút Filter Price
+        $(document).on('click', '.ajax-trigger-filter', function() {
+            loadProducts(1);
+        });
+
+        // 3. Click phân trang AJAX
+        $(document).on('click', '.ajax-pagination-wrapper a', function(e) {
+            e.preventDefault();
+            
+            // Lấy số trang từ link (WordPress thường để dạng /page/2/ hoặc ?paged=2)
+            var href = $(this).attr('href');
+            var page = 1;
+
+            if (href.indexOf('paged=') > -1) {
+                page = href.split('paged=')[1].split(/[&?]/)[0];
+            } else {
+                var arr = href.split('/page/');
+                if (arr.length > 1) {
+                    page = parseInt(arr[1]);
+                }
+            }
+            
+            loadProducts(page);
+        });
+
+        // Khởi tạo Slider (Giữ nguyên logic của bạn)
+        var checkSlider = setInterval(function() {
+            if ($.isFunction($.fn.slider)) {
+                clearInterval(checkSlider);
+                var minVal = parseInt($("#min_price").val()) || 0;
+                var maxVal = parseInt($("#max_price").val()) || 100000;
+
+                $("#slider-range").slider({
+                    range: true,
+                    min: 0,
+                    max: 100000,
+                    values: [minVal, maxVal],
+                    slide: function(event, ui) {
+                        $("#amount").val(ui.values[0].toLocaleString() + "đ - " + ui.values[1].toLocaleString() + "đ");
+                        $("#min_price").val(ui.values[0]);
+                        $("#max_price").val(ui.values[1]);
+                    }
+                });
+                $("#amount").val(minVal.toLocaleString('vi-VN') + "đ - " + maxVal.toLocaleString("vi-VN") + "đ");
+            }
+        }, 100);
+
+
+        // --- TỰ ĐỘNG CHẠY KHI VỪA VÀO TRANG ---
+        $(document).ready(function() {
+            // Kiểm tra nếu đang ở trang có danh sách sản phẩm thì mới chạy
+            if ($('.products').length > 0) {
+                loadProducts(1); 
+            }
+        });
+
+    })(jQuery);
+    </script>
+    <style>
+        /* CSS cơ bản để phân trang trông đẹp hơn */
+        .ajax-pagination-wrapper ul { display: flex; list-style: none; padding: 0; gap: 10px; justify-content: center; }
+        .ajax-pagination-wrapper ul li a, .ajax-pagination-wrapper ul li span {
+            padding: 8px 15px; border: 1px solid #ddd; text-decoration: none; color: #333;
+        }
+        .ajax-pagination-wrapper ul li span.current { background: #333; color: #fff; border-color: #333; }
+    </style>
+    <?php
+}, 999);
