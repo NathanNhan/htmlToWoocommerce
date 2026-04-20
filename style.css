@@ -217,6 +217,11 @@ button.single_add_to_cart_button.button.alt:hover {
     opacity: 0 !important;
 }
 
+ol.flex-control-nav.flex-control-thumbs {
+    display: flex;
+    gap: 7px;
+    margin-top: 7px !important;
+}
 
 /* Css for product detail */
 .variations_form:not(.wopb-loop-variations-form) table.variations tr {

@@ -63,14 +63,29 @@ function add_menu()
     register_nav_menus(array(
         'themeLocationOne' => 'Header Menu One',
     ));
+
+   
 }
 
 //Thêm menu vào wordpress -> footer
 add_action("init", "add_menu");
 
+
 add_theme_support('woocommerce');
 
 add_theme_support('post-thumbnails');
+
+// Kích hoạt tính năng phóng to ảnh (Zoom)
+add_theme_support( 'wc-product-gallery-zoom' );
+
+// Kích hoạt Lightbox (Mở ảnh to trong popup)
+add_theme_support( 'wc-product-gallery-lightbox' );
+
+// Kích hoạt Slider mặc định của WooCommerce (Flexslider)
+add_theme_support( 'wc-product-gallery-slider' );
+
+
+
 
 add_filter('loop_shop_columns', function ($columns) {
     return 3;
@@ -1156,7 +1171,7 @@ add_action('wp_footer', function() {
         // --- TỰ ĐỘNG CHẠY KHI VỪA VÀO TRANG ---
         $(document).ready(function() {
             // Kiểm tra nếu đang ở trang có danh sách sản phẩm thì mới chạy
-            if ($('.products').length > 0) {
+            if ($('.shop-area .products').length > 0) {
                 loadProducts(1); 
             }
         });
