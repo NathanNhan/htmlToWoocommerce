@@ -619,3 +619,13 @@ a {
         transform: rotate(360deg);
     }
 }
+
+
+/* css for quickview */
+.pro-details-color-content ul li a {
+    width: max-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-inline: 7px;
+}

@@ -51,7 +51,10 @@ function load_assets()
         "wishlist" => admin_url("admin-ajax.php"),
     ));
 
-    wp_enqueue_script("myjs.js", get_theme_file_uri() . '/assets/js/my_javascript.js', array('jquery'), '1.02', true);
+    wp_enqueue_script("myjs.js", get_theme_file_uri() . '/assets/js/my_javascript.js', array('jquery'), '1.0.3', true);
+    wp_localize_script("myjs.js", "ajaxurl", array(
+        "quickview" => admin_url("admin-ajax.php"),
+    ));
 
 }
 add_action("wp_enqueue_scripts", "load_assets");
@@ -563,135 +566,6 @@ add_action('wp_ajax_nopriv_createGuest', 'create_new_guest');
 add_action('wp_ajax_createGuest', 'create_new_guest');
 
 
-//handle quick view
-function quick_view_product() {
-    $product = array();
-    if(isset($_POST['id'])) {
-        $product = wc_get_product($_POST['id']);
-    }
-    $attributes_color = '';
-    $arr_colors = [];
-    if(isset($product) &&  $product->get_attribute('pa_color') != "") {
-        $attributes_color = $product->get_attribute('pa_color');
-        $arr_colors = explode(",",$attributes_color);
-    }
-    $attributes_size = '';
-    $arr_size = [];
-    if(isset($product) &&  $product->get_attribute('pa_size') != "") {
-        $attributes_size = $product->get_attribute('pa_size'); 
-        $arr_size = explode(",",$attributes_size);
-    }
-    print_r($arr_colors);
-    ?>
-        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-lg-5 col-md-5 col-12 col-sm-6">
-                                <div class="quickview-img">
-                                    <!-- <img src="<?php echo get_theme_file_uri() . '/assets/images/product/product-3.jpg'?>" alt=""> -->
-                                     <?= $product->get_image(); ?>
-                                </div>
-                            </div>
-                            <div class="col-lg-7 col-md-7 col-12 col-sm-6">
-                                <div class="product-details-content quickview-content">
-                                    <h2><?= $product->get_name(); ?></h2>
-                                    <div class="product-ratting-review-wrap">
-                                        <div class="product-ratting-digit-wrap">
-                                            <div class="product-ratting">
-                                                <i class="icon-rating"></i>
-                                                <i class="icon-rating"></i>
-                                                <i class="icon-rating"></i>
-                                                <i class="icon-rating"></i>
-                                                <i class="icon-star-empty"></i>
-                                            </div>
-                                            <div class="product-digit">
-                                                <span><?= $product->get_average_rating(); ?></span>
-                                            </div>
-                                        </div>
-                                        <div class="product-review-order">
-                                            <span><?= $product->get_review_count() ?> Reviews</span>
-                                            <span><?= $product->get_total_sales(); ?> orders</span>
-                                        </div>
-                                    </div>
-                                    <p><?= $product->get_short_description(); ?></p>
-                                    <div class="pro-details-price">
-                                        <span><?= $product->get_sale_price(); ?></span>
-                                        <span class="old-price"><?= $product->get_regular_price(); ?></span>
-                                    </div>
-                                    <div class="pro-details-color-wrap">
-                                        <span>Color:</span>
-                                        <div class="pro-details-color-content">
-                                            <ul>
-                                                <li><a class="white" href="#">Black</a></li>
-                                                <li><a class="azalea" href="#">Blue</a></li>
-                                                <li><a class="dolly" href="#">Green</a></li>
-                                                <li><a class="peach-orange" href="#">Orange</a></li>
-                                                <li><a class="mona-lisa active" href="#">Pink</a></li>
-                                                <li><a class="cupid" href="#">gray</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="pro-details-size">
-                                        <span>Size:</span>
-                                        <div class="pro-details-size-content">
-                                            <ul>
-                                                <li><a href="#">XS</a></li>
-                                                <li><a href="#">S</a></li>
-                                                <li><a href="#">M</a></li>
-                                                <li><a href="#">L</a></li>
-                                                <li><a href="#">XL</a></li>
-                                                <li><a href="#">XXL</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="pro-details-quality">
-                                        <span>Quantity:</span>
-                                        <div class="cart-plus-minus">
-                                            <input readonly class="cart-plus-minus-box" type="text" name="qtybutton" value="<?= $product->get_stock_quantity(); ?>">
-                                        </div>
-                                    </div>
-                                    <div class="product-details-meta">
-                                        <ul>
-                                            <li><span>Model:</span> <a href="#"><?= $product->get_sku(); ?></a></li>
-                                            <!-- <li><span>Ship To</span> <a href="#">2834 Laurel Lane</a>, <a href="#">Mentone</a> , <a href="#">Texas</a></li> -->
-                                        </ul>
-                                    </div>
-                                    <div class="pro-details-action-wrap">
-                                        <div class="pro-details-buy-now">
-                                            <a href="<?= $product->add_to_cart_url(); ?>">Buy Now</a>
-                                        </div>
-                                        <div class="pro-details-action">
-                                            <a title="Add to Cart" href="#"><i class="icon-basket"></i></a>
-                                            <a title="Add to Wishlist" href="#"><i class="icon-heart"></i></a>
-                                            <a class="social" title="Social" href="#"><i class="icon-share"></i></a>
-                                            <div class="product-dec-social">
-                                                <a class="facebook" title="Facebook" href="#"><i class="icon-social-facebook-square"></i></a>
-                                                <a class="twitter" title="Twitter" href="#"><i class="icon-social-twitter"></i></a>
-                                                <a class="instagram" title="Instagram" href="#"><i class="icon-social-instagram"></i></a>
-                                                <a class="pinterest" title="Pinterest" href="#"><i class="icon-social-pinterest"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-   <?php 
-}
-
-add_action('wp_ajax_nopriv_quickview', 'quick_view_product');
-add_action('wp_ajax_quickview', 'quick_view_product');
-
 
 
 //add to wishlist / like product
@@ -1188,3 +1062,153 @@ add_action('wp_footer', function() {
     </style>
     <?php
 }, 999);
+
+
+
+
+add_action('wp_ajax_load_quickview_product', 'load_quickview_product');
+add_action('wp_ajax_nopriv_load_quickview_product', 'load_quickview_product');
+
+function load_quickview_product() {
+    $product_id = intval($_POST['product_id']);
+    $product = wc_get_product($product_id);
+
+    if (!$product) { wp_die(); }
+
+    // Lấy dữ liệu biến thể nếu là sản phẩm có biến thể
+    $variations_json = '';
+    if ($product->is_type('variable')) {
+        $variations_json = htmlspecialchars(json_encode($product->get_available_variations()));
+    }
+
+
+    ?>
+    <div class="row" id="quickview-product-container" data-product-id="<?php echo $product_id; ?>">
+        <input type="hidden" id="product-variations-data" value="<?php echo $variations_json; ?>">
+        <input type="hidden" id="selected-variation-id" value="">
+
+        <div class="col-lg-5 col-md-5">
+             <div class="quickview-img">
+                <?php echo get_the_post_thumbnail($product_id, 'large', array('id' => 'qv-main-img')); ?>
+            </div>
+        </div>
+        <div class="col-lg-7 col-md-7">
+            <div class="product-details-content">
+                <h2><?php echo $product->get_name(); ?></h2>
+                <div class="pro-details-price mb-3">
+                    <span id="qv-price-display"><?php echo $product->get_price_html(); ?></span>
+                </div>
+
+                <?php if ($product->is_type('variable')) : 
+                    $attributes = $product->get_variation_attributes();
+                    foreach ($attributes as $name => $options) : ?>
+                        <div class="attribute-group mb-2" data-attribute-name="attribute_<?php echo sanitize_title($name); ?>">
+                            <span class="d-block"><strong><?php echo wc_attribute_label($name); ?>:</strong></span>
+                            <ul class="list-inline">
+                                <?php foreach ($options as $option) : ?>
+                                    <li class="list-inline-item">
+                                        <a href="#" class="attribute-option border p-2 d-inline-block" data-value="<?php echo esc_attr($option); ?>">
+                                            <?php echo esc_html($option); ?>
+                                        </a>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </div>
+                    <?php endforeach;
+                endif; ?>
+                
+                <?php if ($product->is_type('variable')) :
+                ?>
+                <div class="pro-details-quality mt-4">
+                    <input class="cart-plus-minus-box form-control w-25 d-inline-block" type="number" value="1" min="1">
+                    <button class="btn btn-primary add-to-cart-qv" disabled>CHỌN BIẾN THỂ</button>
+                </div>
+                <?php else : ?>
+                <div class="pro-details-quality mt-4">
+                    <input class="cart-plus-minus-box form-control w-25 d-inline-block" type="number" value="1" min="1">
+                    <button class="btn btn-primary add-to-cart-qv">Add To Cart</button>
+                </div>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+    <?php
+    wp_die();
+}
+
+
+//handle add to cart with variation
+add_action('wp_ajax_ajax_add_to_cart_quickview', 'ajax_add_to_cart_quickview');
+add_action('wp_ajax_nopriv_ajax_add_to_cart_quickview', 'ajax_add_to_cart_quickview');
+
+function ajax_add_to_cart_quickview() {
+    $product_id = absint($_POST['product_id']);
+    $variation_id = absint($_POST['variation_id']);
+    $quantity = empty($_POST['quantity']) ? 1 : wc_stock_amount($_POST['quantity']);
+
+    // Nếu có variation_id thì thêm sản phẩm biến thể, nếu không thì thêm sản phẩm đơn giản
+    if ($variation_id > 0) {
+        WC()->cart->add_to_cart($product_id, $quantity, $variation_id);
+    } else {
+        WC()->cart->add_to_cart($product_id, $quantity);
+    }
+
+    WC_AJAX::get_refreshed_fragments();
+    wp_die();
+}
+
+
+/**
+ * Cập nhật Side Cart tự code thông qua WooCommerce Fragments
+ */
+function woocommerce_mini_cart() {
+    ?>
+    <div class="sidebar-cart-active" id="sidebar-cart-all" style="z-index: 999;">
+    <div class="sidebar-cart-all">
+        <a class="cart-close" href="#"><i class="icofont-close-line"></i></a>
+        <div class="cart-content">
+            <h3>Shopping Cart</h3>
+            <ul>
+                <?php if ( WC()->cart->is_empty() ) : ?>
+                    <li>Giỏ hàng trống</li>
+                <?php else : ?>
+                    <?php foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) :
+                        $product = $cart_item['data']; ?>
+                        <li class="single-product-cart">
+                            <div class="cart-img">
+                                <a href="<?= $product->get_permalink(); ?>"><?= $product->get_image(); ?></a>
+                            </div>
+                            <div class="cart-title">
+                                <h4><a href="#"><?= $product->get_name(); ?></a></h4>
+                                <span> <?= $cart_item['quantity'] ?> × <?= WC()->cart->get_product_price($product) ?> </span>
+                            </div>
+                            <div class="cart-delete">
+                                <a href="#" class="remove-from-cart" data-cart-key="<?= $cart_item_key ?>">×</a>
+                            </div>
+                        </li>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </ul>
+            <div class="cart-total">
+                <h4>Subtotal: <span><?= WC()->cart->get_cart_subtotal(); ?></span></h4>
+            </div>
+            <div class="cart-checkout-btn">
+                <a class="btn-hover cart-btn-style" href="<?= wc_get_cart_url(); ?>">view cart</a>
+                <a class="no-mrg btn-hover cart-btn-style" href="<?= wc_get_checkout_url(); ?>">checkout</a>
+            </div>
+        </div>
+    </div>
+    </div>
+    <?php
+
+}
+add_filter( 'woocommerce_add_to_cart_fragments', 'update_side_cart_fragments' );
+
+function update_side_cart_fragments( $fragments ) {
+    ob_start();
+    woocommerce_mini_cart();
+    // Gán HTML vừa render vào mảng fragments với key là ID của div
+    $fragments['#sidebar-cart-all'] = ob_get_clean();
+
+    return $fragments;
+}

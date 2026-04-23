@@ -91,38 +91,7 @@
             </div>
         </header>
         <!-- mini cart start -->
-        <div class="sidebar-cart-active">
-            <div class="sidebar-cart-all">
-                <a class="cart-close" href="#"><i class="icofont-close-line"></i></a>
-                <div class="cart-content">
-                    <h3>Shopping Cart</h3>
-                    <ul>
-                        <?php foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) :?>
-                        <?php $product = $cart_item['data']; ?>
-                        <li class="single-product-cart">
-                            <div class="cart-img">
-                                <a href="<?= $product->get_permalink( $cart_item ); ?>"><?=$product->get_image(); ?></a>
-                            </div>
-                            <div class="cart-title">
-                                <h4><a href="#"><?= $product->name ?></a></h4>
-                                <span> <?= $cart_item['quantity'] ?> × $<?= WC()->cart->get_product_price($product) ?>	</span>
-                            </div>
-                            <div class="cart-delete">
-                                <a href="#">×</a>
-                            </div>
-                        </li>
-                        <?php endforeach; ?>
-                    </ul>
-                    <div class="cart-total">
-                        <h4>Subtotal: <span>$<?= WC()->cart->total; ?></span></h4>
-                    </div>
-                    <div class="cart-checkout-btn">
-                        <a class="btn-hover cart-btn-style" href="<?= site_url('gio-hang'); ?>">view cart</a>
-                        <a class="no-mrg btn-hover cart-btn-style" href="<?= site_url('checkout'); ?>">checkout</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <?php woocommerce_mini_cart(); ?>
         <!-- Mobile menu start -->
         <div class="mobile-menu-active clickalbe-sidebar-wrapper-style-1">
             <div class="clickalbe-sidebar-wrap">
