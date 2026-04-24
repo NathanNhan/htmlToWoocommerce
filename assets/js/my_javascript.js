@@ -227,7 +227,7 @@ jQuery(document).ready(function ($) {
         $(document).on('click', '.cart-close', function (e) {
             e.preventDefault();
             $('.sidebar-cart-active').removeClass('inside');
-            $('.main-wrapper').removeClass('overlay-active');
+            // $('.main-wrapper').removeClass('overlay-active');
 
         });
     });
