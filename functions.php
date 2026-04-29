@@ -51,6 +51,11 @@ function load_assets()
         "wishlist" => admin_url("admin-ajax.php"),
     ));
 
+    wp_enqueue_script("compare.js", get_theme_file_uri() . '/assets/js/compare.js', array('jquery'), '1.0.0', true);
+    wp_localize_script("wishlist.js", "ajaxurl", array(
+        "compare" => admin_url("admin-ajax.php"),
+    ));
+
     wp_enqueue_script("myjs.js", get_theme_file_uri() . '/assets/js/my_javascript.js', array('jquery'), '1.0.3', true);
     wp_localize_script("myjs.js", "ajaxurl", array(
         "quickview" => admin_url("admin-ajax.php"),
@@ -1212,3 +1217,8 @@ function update_side_cart_fragments( $fragments ) {
 
     return $fragments;
 }
+
+
+
+
+

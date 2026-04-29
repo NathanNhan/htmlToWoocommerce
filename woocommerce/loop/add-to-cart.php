@@ -38,7 +38,7 @@ echo apply_filters(
             <a href="%s" aria-describedby="woocommerce_loop_add_to_cart_link_describedby_%s" data-quantity="%s" class="%s" %s>%s</a>
         </div>
         <button id="quick_view" class="quickview" data-bs-toggle="modal" data-bs-target="#exampleModal" data-product-id="%s"><i class="icon-zoom"></i></button>
-        <button title="Add to Compare"><i class="icon-compare"></i></button>
+        <button class="compare-btn" data-id="%s" title="Add to Compare"><i class="icon-compare"></i></button>
         <button class="like-btn" data-id="%s" title="Add to Wishlist"><i class="icon-heart-empty"></i></button>
         
     </div>
@@ -53,6 +53,7 @@ echo apply_filters(
         esc_attr(isset($args['class']) ? $args['class'] : 'button'),
         isset($args['attributes']) ? wc_implode_html_attributes($args['attributes']) : '',
         esc_html($product->add_to_cart_text()),
+        esc_attr($product->get_id()),
         esc_attr($product->get_id()),
         esc_attr($product->get_id()),
         
