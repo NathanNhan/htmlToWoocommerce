@@ -629,3 +629,8 @@ a {
     align-items: center;
     padding-inline: 7px;
 }
+
+.sidebar-cart-all img {
+    width: 150px !important;
+    height: 150px !important;
+}

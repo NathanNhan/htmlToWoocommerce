@@ -24,9 +24,11 @@ jQuery(document).ready(function ($) {
         if (index > -1) {
             // Nếu đã có trong danh sách -> Xóa đi (Compared)
             ComparedIds.splice(index, 1);
+            alert("Sản phẩm của bạn đã được xóa khỏi danh sách compare!");
         } else {
             // Nếu chưa có -> Thêm vào (Compared)
             ComparedIds.push(productId);
+            alert("Sản phẩm của bạn đã được thêm vào danh sách compare!");
         }
 
         // Lưu mảng mới vào Local Storage

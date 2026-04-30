@@ -51,9 +51,9 @@ function load_assets()
         "wishlist" => admin_url("admin-ajax.php"),
     ));
 
-    wp_enqueue_script("compare.js", get_theme_file_uri() . '/assets/js/compare.js', array('jquery'), '1.0.0', true);
-    wp_localize_script("wishlist.js", "ajaxurl", array(
-        "compare" => admin_url("admin-ajax.php"),
+    wp_enqueue_script("compare.js", get_theme_file_uri() . '/assets/js/compare.js', array('jquery'), '1.0.1', true);
+    wp_localize_script("compare.js", "ajax_object", array(
+        "ajax_url" => admin_url("admin-ajax.php"),
     ));
 
     wp_enqueue_script("myjs.js", get_theme_file_uri() . '/assets/js/my_javascript.js', array('jquery'), '1.0.3', true);
@@ -1220,5 +1220,132 @@ function update_side_cart_fragments( $fragments ) {
 
 
 
+//handle compare product
+
+
+
+
+add_action('wp_ajax_get_compare_products', 'get_compare_products_callback');
+add_action('wp_ajax_nopriv_get_compare_products', 'get_compare_products_callback');
+function get_compare_products_callback() {
+
+    $product_ids = isset($_POST['product_ids']) 
+        ? array_map('intval', $_POST['product_ids']) 
+        : [];
+        //[104,96]
+
+    if (empty($product_ids)) {
+        wp_send_json_error(['html' => '<p>Không có sản phẩm nào.</p>']);
+        return; // ← THÊM VÀO
+    }
+
+    $products = [];
+
+    foreach ($product_ids as $id) {
+        $product = wc_get_product($id);
+        if (!$product) continue;
+
+        $categories  = get_the_terms($id, 'product_cat');
+        $cat_name    = (!empty($categories) && !is_wp_error($categories)) ? $categories[0]->name : '';
+        $cat_link    = (!empty($categories) && !is_wp_error($categories)) ? get_term_link($categories[0]) : '#';
+        $image       = get_the_post_thumbnail_url($id, 'medium') ?: wc_placeholder_img_src();
+        $permalink   = get_permalink($id);
+        $title       = $product->get_name();
+        $price       = $product->get_price_html();
+        $sku         = $product->get_sku() ?: '—';
+        $stock       = $product->is_in_stock() 
+                        ? '<span class="in-stock">Còn hàng</span>' 
+                        : '<span class="out-stock">Hết hàng</span>';
+        $rating      = (float) $product->get_average_rating();
+        $stars_full  = str_repeat('★', round($rating));
+        $stars_empty = str_repeat('☆', 5 - round($rating));
+        $description = wp_trim_words($product->get_short_description(), 15, '...');
+
+        $products[] = compact(
+            'id', 'title', 'permalink', 'image',
+            'cat_name', 'cat_link', 'price', 'sku',
+            'stock', 'stars_full', 'stars_empty', 'rating', 'description'
+        );
+    }
+
+    if (empty($products)) {
+        wp_send_json_error(['html' => '<p>Không tìm thấy sản phẩm hợp lệ.</p>']);
+        return; // ← THÊM VÀO
+    }
+
+    ob_start();
+    ?>
+    <table class="table table-bordered mb-0">
+        <tbody>
+            <tr>
+                <td class="first-column">Product</td>
+                <?php foreach ($products as $p) : ?>
+                <td class="product-image-title">
+                    <a href="<?php echo esc_url($p['permalink']); ?>" class="image">
+                        <img class="img-fluid" src="<?php echo esc_url($p['image']); ?>" alt="<?php echo esc_attr($p['title']); ?>">
+                    </a>
+                    <a href="<?php echo esc_url($p['cat_link']); ?>" class="category">
+                        <?php echo esc_html($p['cat_name']); ?>
+                    </a>
+                    <a href="<?php echo esc_url($p['permalink']); ?>" class="title">
+                        <?php echo esc_html($p['title']); ?>
+                    </a>
+                </td>
+                <?php endforeach; ?>
+            </tr>
+            <tr>
+                <td class="first-column">Giá</td>
+                <?php foreach ($products as $p) : ?>
+                <td class="product-price"><?php echo $p['price']; ?></td>
+                <?php endforeach; ?>
+            </tr>
+            <tr>
+                <td class="first-column">SKU</td>
+                <?php foreach ($products as $p) : ?>
+                <td><?php echo esc_html($p['sku']); ?></td>
+                <?php endforeach; ?>
+            </tr>
+            <tr>
+                <td class="first-column">Tình trạng</td>
+                <?php foreach ($products as $p) : ?>
+                <td><?php echo $p['stock']; ?></td>
+                <?php endforeach; ?>
+            </tr>
+            <tr>
+                <td class="first-column">Đánh giá</td>
+                <?php foreach ($products as $p) : ?>
+                <td class="product-rating">
+                    <span class="stars">
+                        <span class="filled"><?php echo esc_html($p['stars_full']); ?></span>
+                        <?php echo esc_html($p['stars_empty']); ?>
+                    </span>
+                    <span class="score">(<?php echo esc_html($p['rating']); ?>)</span>
+                </td>
+                <?php endforeach; ?>
+            </tr>
+            <tr>
+                <td class="first-column">Mô tả</td>
+                <?php foreach ($products as $p) : ?>
+                <td><?php echo esc_html($p['description']); ?></td>
+                <?php endforeach; ?>
+            </tr>
+             <tr>
+                <td class="first-column">Remove</td>
+                <?php foreach ($products as $p) : ?>
+                <td class="pro-remove">
+                    <a href="#" class="remove-compare" data-id="<?php echo esc_attr($p['id']); ?>">
+                        <img class="inject-me" src="<?php echo esc_url(get_theme_file_uri('/assets/images/icon/close.png')); ?>" alt="">
+                    </a>
+                </td>
+                <?php endforeach; ?>
+            </tr>
+        </tbody>
+    </table>
+    <?php
+    $html = ob_get_clean();
+
+    wp_send_json_success(['html' => $html]);
+    wp_die(); // ← Thêm để chắc chắn
+}
 
 

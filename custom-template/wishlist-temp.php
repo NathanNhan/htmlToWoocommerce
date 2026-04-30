@@ -62,7 +62,7 @@ jQuery(document).ready(function($) {
 
     // Gửi AJAX để lấy thông tin sản phẩm dựa trên ID từ Local Storage
     $.ajax({
-        url: '<?php echo admin_url('admin-ajax.php'); ?>',
+        url: ajaxurl.wishlist,
         type: 'POST',
         data: {
             action: 'get_wishlist_products',
